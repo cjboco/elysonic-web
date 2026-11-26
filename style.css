@@ -330,6 +330,7 @@ h4 {
 
 /* Buttons */
 .btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -347,6 +348,7 @@ h4 {
 
 .btn-primary {
   background: var(--gradient-brand);
+  background-origin: border-box;
   color: #160c0f;
   box-shadow: 0 10px 30px rgba(255, 110, 77, 0.25);
 }
@@ -374,17 +376,36 @@ h4 {
 }
 
 .btn-beta {
+  position: absolute;
+  top: -9px;
+  right: -10px;
+  z-index: 2;
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   line-height: 1;
-  padding: 0.22rem 0.5rem;
+  padding: 0.24rem 0.52rem;
   border-radius: 999px;
-  background: rgba(22, 12, 15, 0.16);
-  border: 1px solid rgba(22, 12, 15, 0.26);
-  color: #160c0f;
+  background: #140f17;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: var(--ink);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55);
+  transform: rotate(9deg);
+  pointer-events: none;
+  transition: transform 180ms ease;
+}
+
+.btn-primary:hover .btn-beta {
+  transform: rotate(12deg) scale(1.04);
+}
+
+.btn-nav .btn-beta {
+  top: -8px;
+  right: -8px;
+  font-size: 0.6rem;
+  padding: 0.2rem 0.44rem;
 }
 
 /* Badges (strictly Power / Spec status only) */

@@ -1,6 +1,42 @@
 (() => {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ==================== 0. DIRECT LATEST INSTALLER DOWNLOAD ==================== */
+  const downloadLinks = [...document.querySelectorAll('a[data-download-latest]')];
+  if (downloadLinks.length) {
+    const LATEST_API = 'https://api.github.com/repos/cjboco/elysonic-releases/releases/latest';
+    const FALLBACK_URL = 'https://github.com/cjboco/elysonic-releases/releases/latest';
+    let resolvedPkgUrl = null;
+
+    const latestPkgPromise = fetch(LATEST_API, { headers: { Accept: 'application/vnd.github+json' } })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((release) => {
+        if (!release || !Array.isArray(release.assets)) return null;
+        const pkg = release.assets.find((a) => typeof a.name === 'string' && a.name.toLowerCase().endsWith('.pkg'));
+        const zip = release.assets.find((a) => typeof a.name === 'string' && a.name.toLowerCase().endsWith('.zip'));
+        const asset = pkg || zip;
+        if (!asset || !asset.browser_download_url) return null;
+        resolvedPkgUrl = asset.browser_download_url;
+        for (const link of downloadLinks) {
+          link.href = resolvedPkgUrl;
+          link.setAttribute('download', asset.name);
+        }
+        return resolvedPkgUrl;
+      })
+      .catch(() => null);
+
+    downloadLinks.forEach((link) => {
+      link.addEventListener('click', (event) => {
+        if (resolvedPkgUrl || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        const timeout = new Promise((resolve) => setTimeout(() => resolve(null), 2500));
+        Promise.race([latestPkgPromise, timeout]).then((url) => {
+          window.location.assign(url || FALLBACK_URL);
+        });
+      });
+    });
+  }
+
   /* ==================== 1. GENERIC ACCESSIBLE TABS ==================== */
   function initTabGroup(tabSelector, panelSelector, dataAttr) {
     const tabs = [...document.querySelectorAll(tabSelector)];
@@ -38,10 +74,10 @@
 
   /* ==================== 2. EQ INHERITANCE EXPLAINER ==================== */
   const cascadeNotes = {
-    song: 'Active rule: Song EQ wins first, even if you save a flat curve to tame one bright track.',
-    album: 'Active rule: Album EQ applies to every track on the record unless a specific song overrides it.',
-    output: 'Active rule: Output EQ follows your speakers, DAC, or headphones automatically when you switch devices.',
-    all: 'Active rule: All Music is your baseline default whenever no song, album, or output override is saved.'
+    song: 'Saved for this song: uses this song\'s sound first, even if you saved a flat setting for one bright track.',
+    album: 'Saved for this album: applies to every track on the record unless a single song has its own setting.',
+    output: 'Saved for this device: follows your speakers or headphones automatically whenever you switch.',
+    all: 'Your default: plays whenever no song, album, or speaker setting is saved.'
   };
   const cascadeNodes = [...document.querySelectorAll('[data-cascade]')];
   const cascadeNoteEl = document.querySelector('#cascade-note');
@@ -63,13 +99,13 @@
       const val = Number(dialInput.value);
       if (val < 34) {
         dialLabel.textContent = 'Familiar Favorites';
-        dialDesc.textContent = 'Stays close to your seed with highly rated songs, hearted tracks, and artists you already return to often.';
+        dialDesc.textContent = 'Stays close to your starting song with highly rated tracks, hearted songs, and artists you already return to often.';
       } else if (val < 68) {
         dialLabel.textContent = 'Balanced Mix';
-        dialDesc.textContent = 'Blends loved tracks near your seed with unplayed album cuts from adjacent genres. Downvoted songs move to Played less.';
+        dialDesc.textContent = 'Blends favorite songs near your starting song with unplayed album cuts from related genres. Downvoted songs move to Played less.';
       } else {
         dialLabel.textContent = 'Deep Cuts & Rediscovery';
-        dialDesc.textContent = 'Pushes further across your collection to pull in rarely played albums, B-sides, and forgotten tracks connected to your seed.';
+        dialDesc.textContent = 'Reaches further across your collection for rarely played albums, B-sides, and forgotten tracks connected to your starting song.';
       }
     };
     dialInput.addEventListener('input', updateDial);
@@ -88,7 +124,9 @@
         item.setAttribute('aria-pressed', String(active));
       }
       for (const card of specCards) {
-        card.hidden = selected !== 'all' && card.dataset.category !== selected;
+        const tiers = (card.dataset.tier || '').split(/\s+/).filter(Boolean);
+        const matches = selected === 'all' || card.dataset.category === selected || tiers.includes(selected);
+        card.hidden = !matches;
       }
     });
   });
@@ -174,7 +212,7 @@
     function updateReadout() {
       if (readout) {
         const palLabel = currentStyle === 'retro-scifi' ? 'Console Film Palette' : `${PALETTES[currentPalette].name} Palette`;
-        readout.textContent = `${STYLE_NAMES[currentStyle]} · ${palLabel} · 48 kHz / 24-bit`;
+        readout.textContent = `${STYLE_NAMES[currentStyle]} · ${palLabel}`;
       }
       if (bpmPill) {
         bpmPill.hidden = true;
@@ -209,12 +247,12 @@
 
     if (toggleBtn) {
       if (!isPlaying) {
-        toggleBtn.textContent = 'Animate spectrum';
+        toggleBtn.textContent = 'Play';
         toggleBtn.setAttribute('aria-pressed', 'false');
       }
       toggleBtn.addEventListener('click', () => {
         isPlaying = !isPlaying;
-        toggleBtn.textContent = isPlaying ? 'Pause spectrum' : 'Animate spectrum';
+        toggleBtn.textContent = isPlaying ? 'Pause' : 'Play';
         toggleBtn.setAttribute('aria-pressed', String(isPlaying));
       });
     }

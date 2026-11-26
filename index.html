@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b090e">
-  <meta name="description" content="Elysonic is a native macOS music player and library manager built in Rust and SQLite for large local collections. Audiophile EQ, 8 visualizers, Listening Room, Karaoke Mode, Apple Music library sharing, Album Journeys, and deep library repair with zero subscription.">
-  <meta property="og:title" content="Elysonic · A serious Mac player for the music you own">
-  <meta property="og:description" content="Play local FLAC, ALAC, CUE, and shared Apple Music collections on macOS. 10-band inherited EQ, 8 live visualizers, Listening Room, Karaoke Mode with vocal reduction, Album Journeys, and library repair.">
+  <meta name="description" content="Elysonic is a free music player for the music you already own. Simple, offline, and ready the second you open it. Connect your own MusicBrainz, Discogs, or AI keys later if you want to unlock Album Journeys, Music Tree, and more.">
+  <meta property="og:title" content="Elysonic · Free music player for the music you own">
+  <meta property="og:description" content="A free, simple music player for your own songs and albums. No account, no subscription. Connect your own APIs and AI later if you want to unlock power features.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://elysonic.com/">
   <link rel="canonical" href="https://elysonic.com/">
-  <title>Elysonic · A serious Mac player for the music you own</title>
+  <title>Elysonic · Free music player for the music you own</title>
   <link rel="icon" href="assets/app-icon.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,441 +28,524 @@
         <span>elysonic</span>
       </a>
       <nav class="main-nav" aria-label="Primary navigation">
-        <a href="#sound">Sound &amp; EQ</a>
-        <a href="#journeys">Journeys</a>
-        <a href="#lyrics">Lyrics</a>
-        <a href="#discovery">Discovery</a>
-        <a href="#workshop">Library Repair</a>
-        <a href="#privacy">Local-First</a>
-        <a href="#specs">All Features</a>
+        <a href="#basics">The Player</a>
+        <a href="#sound">Sound</a>
+        <a href="#cost">It's Free</a>
+        <span class="nav-sep" aria-hidden="true"></span>
+        <a class="nav-power" href="#ready-for-power">Power Features</a>
       </nav>
-      <a class="nav-pill" href="#preview">
-        <span class="pulse-dot" aria-hidden="true"></span>
-        Download for Mac
-      </a>
+      <div class="masthead-actions">
+        <a class="mobile-power-link" href="#ready-for-power">Power ↓</a>
+        <a class="nav-pill" href="https://github.com/cjboco/elysonic-releases/releases/latest" data-download-latest>
+          <span class="pulse-dot" aria-hidden="true"></span>
+          Free Download
+        </a>
+      </div>
     </div>
   </header>
 
   <main id="main" tabindex="-1">
-    <!-- HERO -->
+    <!-- ===================================================================== -->
+    <!-- TOP HALF: SIMPLE, FRIENDLY CORE MUSIC PLAYER                          -->
+    <!-- ===================================================================== -->
     <section class="hero" aria-labelledby="hero-headline">
       <div class="hero-ambient" aria-hidden="true"></div>
       <div class="shell">
         <div class="hero-header">
-          <div class="eyebrow">
-            <span class="mono-tag">macOS 14+ · Apple Silicon</span>
+          <p class="eyebrow-line">
+            <span class="eyebrow-mint">Free Download</span>
             <span class="dot-sep" aria-hidden="true"></span>
-            <span>Rust + SQLite Core</span>
+            <span>No Account</span>
             <span class="dot-sep" aria-hidden="true"></span>
-            <span>Offline by Default</span>
-          </div>
+            <span>No Subscription</span>
+          </p>
           <h1 id="hero-headline">
-            Your music library,<br>
-            <span class="serif-accent">treated like a record collection.</span>
+            Play the music you own.<br>
+            <span class="serif-accent">Simple, joyful, and free.</span>
           </h1>
           <p class="hero-sub">
-            A native Mac player and library workbench built for huge collections of local files and shared Apple Music libraries.
-            Listen in the full-stage Listening Room, dial in 10-band studio EQ with 8 live visualizers, sing in Karaoke Mode with real-time vocal reduction,
-            trace artist trees, repair broken tags, and hear narrated stories behind the albums you own.
+            A calm, fast music player for the songs and albums you bought or ripped, on your computer, an external drive, or inside your Apple Music folder.
+            Whether you have fifty CDs or five thousand albums, open it, pick your folder, and press play.
           </p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="https://github.com/cjboco/elysonic-releases/releases/latest" target="_blank" rel="noopener">
-              Download for Mac
+            <a class="btn btn-primary" href="https://github.com/cjboco/elysonic-releases/releases/latest" data-download-latest>
+              Free Download
               <span aria-hidden="true">↓</span>
             </a>
-            <a class="btn btn-secondary" href="#sound">
-              Take the tour
+            <a class="btn btn-secondary" href="#basics">
+              See how it works
             </a>
           </div>
-          <ul class="hero-format-bar" aria-label="Supported formats and core capabilities">
-            <li>FLAC</li>
-            <li>ALAC</li>
-            <li>MP3</li>
-            <li>AAC / M4A</li>
-            <li>Opus</li>
-            <li>Ogg Vorbis</li>
-            <li>WAV / AIFF</li>
-            <li>CUE Sheets</li>
-            <li>Apple Music Sharing</li>
-            <li>No Account</li>
-          </ul>
-        </div>
-
-        <!-- INTERACTIVE HERO STAGE -->
-        <div class="hero-stage" data-stage>
-          <div class="stage-tabs" role="tablist" aria-label="Preview Elysonic views">
-            <button type="button" class="stage-tab is-active" role="tab" aria-selected="true" aria-controls="stage-panel-room" id="stage-tab-room" data-stage-tab="room">
-              <span class="tab-index">01</span>
-              <span>Listening Room</span>
-            </button>
-            <button type="button" class="stage-tab" role="tab" aria-selected="false" aria-controls="stage-panel-karaoke" id="stage-tab-karaoke" data-stage-tab="karaoke">
-              <span class="tab-index">02</span>
-              <span>Karaoke Mode</span>
-            </button>
-            <button type="button" class="stage-tab" role="tab" aria-selected="false" aria-controls="stage-panel-eq" id="stage-tab-eq" data-stage-tab="eq">
-              <span class="tab-index">03</span>
-              <span>10-Band EQ &amp; Solaris</span>
-            </button>
-            <button type="button" class="stage-tab" role="tab" aria-selected="false" aria-controls="stage-panel-journey" id="stage-tab-journey" data-stage-tab="journey">
-              <span class="tab-index">04</span>
-              <span>Album Journeys</span>
-            </button>
-          </div>
-
-          <div class="stage-viewport">
-            <figure class="stage-panel is-active" id="stage-panel-room" role="tabpanel" aria-labelledby="stage-tab-room" data-stage-panel="room">
-              <a class="window-frame" href="assets/listening-room.webp" data-lightbox data-title="Listening Room with Solaris visualizer, whole-song waveform, and syllable-synced lyrics">
-                <img src="assets/listening-room.webp" width="1800" height="1361" fetchpriority="high" alt="Elysonic Listening Room playing The Good Life with the Solaris radial visualizer, style and palette pickers, colored whole-song waveform scrubber, and syllable-synced lyrics">
-              </a>
-              <figcaption class="stage-caption">
-                <div>
-                  <strong>Listening Room with live visualizers and synced lyrics.</strong>
-                  Switch between Cover, Visualizer, and Up Next stages, scrub the colored whole-song waveform, or click any lyric line to jump straight there.
-                </div>
-                <span class="zoom-hint">Click to inspect full size</span>
-              </figcaption>
-            </figure>
-
-            <figure class="stage-panel" id="stage-panel-karaoke" role="tabpanel" aria-labelledby="stage-tab-karaoke" data-stage-panel="karaoke" hidden>
-              <a class="window-frame" href="assets/karaoke.webp" data-lightbox data-title="Karaoke Mode with golden syllable highlight and real-time vocal reduction">
-                <img src="assets/karaoke.webp" width="1800" height="1361" loading="lazy" alt="Elysonic Karaoke Mode highlighting individual syllables in gold on The Good Life with Vocals lowered badge, vocal reduction slider, sync nudge, and text size controls">
-              </a>
-              <figcaption class="stage-caption">
-                <div>
-                  <strong>Karaoke Mode with real-time vocal reduction.</strong>
-                  Giant word-by-word lyrics in four sizes, live vocal attenuation, 3-2-1 lead-in countdowns, per-song timing nudge, and one-click full screen.
-                </div>
-                <span class="zoom-hint">Click to inspect full size</span>
-              </figcaption>
-            </figure>
-
-            <figure class="stage-panel" id="stage-panel-eq" role="tabpanel" aria-labelledby="stage-tab-eq" data-stage-panel="eq" hidden>
-              <a class="window-frame" href="assets/eq.webp" data-lightbox data-title="10-band equalizer, Solaris harmonic visualizer, and whole-song before/after waveform">
-                <img src="assets/eq.webp" width="1800" height="1361" loading="lazy" alt="Elysonic showing Pearl Jam's artist page beside the 10-band equalizer, Solaris visualizer, before-and-after song waveform, and Office Desk listening setup">
-              </a>
-              <figcaption class="stage-caption">
-                <div>
-                  <strong>8 live visualizers and inherited 10-band EQ.</strong>
-                  10-band sliders, four whole-song waveform shapes, Solaris and Analog VU meters, and named listening setups like Office Desk.
-                </div>
-                <span class="zoom-hint">Click to inspect full size</span>
-              </figcaption>
-            </figure>
-
-            <figure class="stage-panel" id="stage-panel-journey" role="tabpanel" aria-labelledby="stage-tab-journey" data-stage-panel="journey" hidden>
-              <a class="window-frame" href="assets/journey.webp" data-lightbox data-title="Album Journey playback for Pinkerton">
-                <img src="assets/journey.webp" width="1800" height="1548" loading="lazy" alt="Chapter 3 of a Weezer Album Journey showing stage photography of the band above a chapter narration and song timeline">
-              </a>
-              <figcaption class="stage-caption">
-                <div>
-                  <strong>Guided Album Journeys.</strong>
-                  Source-backed narration, band photography, and chapter timelines woven directly into the tracks in your library. Photo: Hunter Kahn (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>).
-                </div>
-                <span class="zoom-hint">Click to inspect full size</span>
-              </figcaption>
-            </figure>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SIGNATURE HIGHLIGHTS BENTO -->
-    <section class="section bento-section" aria-labelledby="bento-title">
-      <div class="shell">
-        <div class="section-head">
-          <p class="kicker">Built for real collectors</p>
-          <h2 id="bento-title">Details other music apps forget.</h2>
-          <p class="section-lead">
-            Streaming apps treat your files as an afterthought. Elysonic is engineered from the ground up for people with terabytes of albums, external drives, and strong opinions about playback.
+          <p class="hero-download-note">
+            No subscription cost · Your library works offline · Available now for macOS (Apple M1 or newer), more platforms coming
           </p>
         </div>
 
-        <div class="bento-grid">
-          <article class="bento-card bento-wide">
-            <div class="bento-badge mono-tag">⌘K</div>
-            <h3>Find anything in milliseconds</h3>
-            <p>
-              One command bar searches songs, albums, artists, playlists, genre stations, named listening setups, and app commands across a SQLite full-text index. Jump straight to a track or switch from speakers to headphones without touching a menu.
-            </p>
-            <div class="cmd-preview" aria-hidden="true">
-              <div class="cmd-bar">
-                <span class="cmd-icon">⌘K</span>
-                <span class="cmd-query">office desk</span>
-                <span class="cmd-hint">Listening Setup</span>
-              </div>
-              <div class="cmd-results">
-                <div class="cmd-row is-selected">
-                  <span>Apply setup: Office Desk</span>
-                  <span class="mono-dim">DAC · -16 LUFS · Warm 10-Band</span>
-                </div>
-                <div class="cmd-row">
-                  <span>Start station from current song</span>
-                  <span class="mono-dim">Library Station</span>
-                </div>
-              </div>
+        <!-- HERO VISUAL: 3-SCREENSHOT STACK (ZERO TABS, ALL CLICKABLE) -->
+        <div class="hero-stage">
+          <div class="hero-stack">
+            <a class="window-frame stack-card stack-card-left" href="assets/radio.webp" data-lightbox data-title="Free Internet Radio directory and saved stations">
+              <img src="assets/radio.webp" width="1800" height="1138" loading="lazy" alt="Elysonic Radio view with saved stations and a live global directory">
+            </a>
+            <a class="window-frame stack-card stack-card-main" href="assets/hero-player.webp" data-lightbox data-title="Playing an album in Elysonic with Up Next">
+              <img src="assets/hero-player.webp" width="1800" height="1178" fetchpriority="high" alt="Elysonic playing Shine Again by Weezer with golden embossed album artwork, tracklist, Up Next queue on the right, and playback controls along the bottom">
+            </a>
+            <a class="window-frame stack-card stack-card-right" href="assets/eq.webp" data-lightbox data-title="10-band Equalizer and Solaris visualizer beside your library">
+              <img src="assets/eq.webp" width="1800" height="1361" loading="lazy" alt="Elysonic showing the 10-band equalizer, glowing Solaris ring visualizer, and whole-song waveform beside the library">
+            </a>
+          </div>
+          <div class="stage-caption">
+            <div>
+              <strong>Your music, front and center.</strong>
+              Play your albums with Up Next, tune the sound with live visualizers, or spin free global radio. Hover or click any screen to inspect full size.
             </div>
-          </article>
+            <span class="zoom-hint">Click any screen to enlarge</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-          <article class="bento-card">
-            <div class="bento-badge mono-tag">Apple Music Ready</div>
-            <h3>Share Apple Music read-only, adopt on edit</h3>
+    <!-- CORE 1: EVERYDAY LISTENING (ASYMMETRIC 4-CARD BENTO) -->
+    <section id="basics" class="section bento-section" aria-labelledby="bento-title">
+      <div class="shell">
+        <div class="section-head">
+          <p class="kicker">Simple From Day One</p>
+          <h2 id="bento-title">Everything a great music player should do.</h2>
+          <p class="section-lead">
+            Other apps try to sell you a subscription every time you open them. Elysonic stays focused on the music you already own, whether you have fifty CDs or five thousand albums.
+          </p>
+        </div>
+
+        <div class="bento-grid bento-grid-4">
+          <article class="bento-card bento-lead-wide">
+            <span class="card-kicker">Your Apple Music Library</span>
+            <h3>Plays the songs you own in Apple Music</h3>
             <p>
-              Add your Apple Music folder without duplicating a single file. Elysonic never edits, moves, or deletes Apple Music files. Save a change to an album and Elysonic copies it into your own library first via APFS copy-on-write, plus imports playlists and play counts straight from Apple Music.
+              Already have ripped CDs or purchased songs in Apple Music? Point Elysonic right at that folder with no duplicate copies. It plays the music you bought or ripped (not rented Apple Music streams), never edits, moves, or deletes those files, and brings over your playlists and play counts in one step.
             </p>
           </article>
 
           <article class="bento-card">
-            <div class="bento-badge mono-tag">Listening Room</div>
-            <h3>A full-stage Now Playing room</h3>
+            <span class="card-kicker">Built for Real Collections</span>
+            <h3>Your folders, your drives, your files</h3>
             <p>
-              Step into an ambient backdrop pulled straight from the album sleeve. Switch between Cover, widescreen live Visualizer, and Up Next, scrub the whole-song waveform, read liner notes, or click any synced lyric line to jump straight there.
+              Plays FLAC, ALAC, MP3, AAC, WAV, and more. Search your whole library in a split second, unplug an external drive without losing your records, and upgrade old files to cleaner copies while keeping your favorites and playlists.
             </p>
           </article>
 
           <article class="bento-card">
-            <div class="bento-badge mono-tag">Karaoke Mode</div>
-            <h3>Sing along with real-time vocal reduction</h3>
+            <span class="card-kicker">No Mistakes</span>
+            <h3>Never lose your Up Next list</h3>
             <p>
-              Fill the window or go full screen with giant word-by-word lyrics in four sizes, 3-2-1 instrumental lead-in countdowns, live vocal reduction, per-song timing nudge, and an on-stage Up Next songbook.
+              Accidentally wiped out an afternoon's queue with one wrong click? Elysonic keeps your last ten queues so you can jump right back, and Undo reverses mistakes across the app.
             </p>
           </article>
 
           <article class="bento-card">
-            <div class="bento-badge mono-tag">Smart Replace</div>
-            <h3>Upgrade MP3s to FLAC without losing history</h3>
+            <span class="card-kicker">Album Craft</span>
+            <h3>Plays albums the way they were made</h3>
             <p>
-              Drop a lossless rip onto an existing album and choose Replace. Elysonic transfers every heart, play count, playlist slot, and per-song EQ curve directly onto the new files.
+              Live albums and medleys flow without awkward pauses between tracks. Keep paired songs glued together even on shuffle, skip long dead silence, set a sleep timer at night, or stop cleanly when the album ends.
             </p>
-          </article>
-
-          <article class="bento-card">
-            <div class="bento-badge mono-tag">Queue Safety</div>
-            <h3>Earlier Queues &amp; app-wide Undo</h3>
-            <p>
-              Accidentally wiped out a two-hour queue with one click? Elysonic keeps your last ten replaced queues with exact positions intact, plus ⌘Z Undo across queue edits, metadata, artwork, and repairs.
-            </p>
-          </article>
-
-          <article class="bento-card">
-            <div class="bento-badge mono-tag">External Drives</div>
-            <h3>Offline drives keep their records</h3>
-            <p>
-              Unplug your Thunderbolt archive without watching your catalog vanish. Elysonic remembers offline drives, reconnects moved files when identity matches, and keeps removing a folder separate from deleting audio.
-            </p>
-          </article>
-
-          <article class="bento-card">
-            <div class="bento-badge mono-tag">Playback Craft</div>
-            <h3>Gapless, Keep with Next &amp; Continuous Mix</h3>
-            <p>
-              Play live albums and side-B medleys without seams. Mark tracks to stay glued together even on shuffle, skip dead silence, set a sleep timer, or stop cleanly after the current album ends.
-            </p>
-          </article>
-
-          <article class="bento-card bento-full bento-highlight">
-            <div class="bento-full-copy">
-              <div class="bento-badge mono-tag">macOS Bonus</div>
-              <h3>A live macOS EQ Screen Saver fed by your music</h3>
-              <p>
-                Install the companion macOS screen saver and Elysonic streams live spectrum, style, color ramp, and numeric playback data straight to your resting display. Choose from the same 8 visualizer styles you use inside the app.
-              </p>
-            </div>
-            <div class="bento-full-meta" aria-label="Screen saver capabilities">
-              <span class="meta-chip">8 Visual Styles</span>
-              <span class="meta-chip">Analog VU · Solaris · Silk</span>
-              <span class="meta-chip">Custom Color Ramps</span>
-              <span class="meta-chip">Live Local Spectrum Feed</span>
-            </div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- ACT I: SOUND, EQ & VISUALIZERS -->
+    <!-- CORE 2: SOUND & LIVE VISUALS -->
     <section id="sound" class="section sound-section" aria-labelledby="sound-title">
       <div class="shell">
         <div class="section-head">
-          <p class="kicker">Act I · Sound, Equalizer &amp; Visualizer</p>
-          <h2 id="sound-title">Studio-grade control.<br><span class="serif-accent">Zero menu diving.</span></h2>
+          <p class="kicker">Sound &amp; Visuals</p>
+          <h2 id="sound-title">Great sound.<br><span class="serif-accent">Easy to tune.</span></h2>
           <p class="section-lead">
-            Start with simple Bass, Middle, and Treble sliders, or open the 10-band Advanced Equalizer with live before-and-after spectrums, AutoEq headphone correction, and a full Sound Path inspector.
+            Every song plays at a comfortable, even volume so you stop reaching for the volume knob. Start with simple Bass, Middle, and Treble sliders, and watch your music come alive in 8 visual styles.
           </p>
         </div>
 
-        <!-- INTERACTIVE VISUALIZER & INHERITANCE CONSOLE -->
-        <div class="sound-console">
-          <div class="console-main">
-            <div class="console-topbar">
-              <div class="console-meta">
-                <span class="mono-tag">Live Visualizer Preview</span>
-                <span class="console-spec" id="viz-readout">LED bars · Elysonic Palette · 48 kHz / 24-bit</span>
-              </div>
-              <button type="button" class="console-toggle" id="viz-play-toggle" aria-pressed="true">Pause spectrum</button>
+        <!-- FULL-WIDTH INTERACTIVE VISUALIZER CONSOLE -->
+        <div class="console-main console-wide">
+          <div class="console-topbar">
+            <div class="console-meta">
+              <span class="card-kicker card-kicker-inline">Try the Visualizers</span>
+              <span class="console-spec" id="viz-readout">LED bars · Elysonic Palette</span>
             </div>
+            <button type="button" class="console-toggle" id="viz-play-toggle" aria-pressed="true">Pause</button>
+          </div>
 
-            <div class="viz-canvas-wrap">
-              <canvas id="eq-visualizer-canvas" width="960" height="300" aria-label="Interactive preview of Elysonic equalizer visualizer styles"></canvas>
-              <div class="viz-overlay-info" aria-hidden="true">
-                <span id="viz-bpm-pill" class="viz-bpm" hidden>118 BPM</span>
-              </div>
+          <div class="viz-canvas-wrap">
+            <canvas id="eq-visualizer-canvas" width="960" height="300" aria-label="Interactive preview of Elysonic music visualizer styles"></canvas>
+            <div class="viz-overlay-info" aria-hidden="true">
+              <span id="viz-bpm-pill" class="viz-bpm" hidden>118 BPM</span>
             </div>
+          </div>
 
-            <div class="console-controls">
-              <div class="control-group">
-                <span class="control-label">8 Visual Styles · 4 Whole-Song Waveform Shapes (Filled, Bars, Line, Dots)</span>
-                <div class="chip-row" role="group" aria-label="Visualizer style" data-viz-styles>
-                  <button type="button" class="chip is-active" data-style="mini-led" aria-pressed="true">LED bars</button>
-                  <button type="button" class="chip" data-style="classic" aria-pressed="false">Classic</button>
-                  <button type="button" class="chip" data-style="analog-vu" aria-pressed="false">Analog VU</button>
-                  <button type="button" class="chip" data-style="solaris" aria-pressed="false">Solaris</button>
-                  <button type="button" class="chip" data-style="silk" aria-pressed="false">Aurora silk</button>
-                  <button type="button" class="chip" data-style="crt" aria-pressed="false">CRT</button>
-                  <button type="button" class="chip" data-style="retro-scifi" aria-pressed="false">Retro sci-fi</button>
-                  <button type="button" class="chip" data-style="pulsar" aria-pressed="false">Pulsar</button>
-                </div>
-              </div>
-
-              <div class="control-group">
-                <span class="control-label">6 Built-in Palettes (+ Custom 2 to 5 Color Ramps)</span>
-                <div class="chip-row" role="group" aria-label="Visualizer color palette" data-viz-palettes>
-                  <button type="button" class="chip is-active" data-palette="elysonic" aria-pressed="true">Elysonic</button>
-                  <button type="button" class="chip" data-palette="ocean" aria-pressed="false">Ocean</button>
-                  <button type="button" class="chip" data-palette="aurora" aria-pressed="false">Aurora</button>
-                  <button type="button" class="chip" data-palette="ember" aria-pressed="false">Ember</button>
-                  <button type="button" class="chip" data-palette="synthwave" aria-pressed="false">Synthwave</button>
-                  <button type="button" class="chip" data-palette="phosphor" aria-pressed="false">Phosphor</button>
-                </div>
+          <div class="console-controls">
+            <div class="control-group">
+              <span class="control-label">Pick a visual style (8 built in)</span>
+              <div class="chip-row" role="group" aria-label="Visualizer style" data-viz-styles>
+                <button type="button" class="chip is-active" data-style="mini-led" aria-pressed="true">LED bars</button>
+                <button type="button" class="chip" data-style="classic" aria-pressed="false">Classic</button>
+                <button type="button" class="chip" data-style="analog-vu" aria-pressed="false">Analog VU</button>
+                <button type="button" class="chip" data-style="solaris" aria-pressed="false">Solaris</button>
+                <button type="button" class="chip" data-style="silk" aria-pressed="false">Aurora silk</button>
+                <button type="button" class="chip" data-style="crt" aria-pressed="false">CRT</button>
+                <button type="button" class="chip" data-style="retro-scifi" aria-pressed="false">Retro sci-fi</button>
+                <button type="button" class="chip" data-style="pulsar" aria-pressed="false">Pulsar</button>
               </div>
             </div>
 
-            <div class="signal-strip" aria-label="Example Elysonic Sound Path">
-              <span class="control-label">Live Sound Path</span>
-              <div class="signal-chain">
-                <span>FLAC 24-bit</span>
-                <span class="sig-sep" aria-hidden="true">→</span>
-                <span>AutoEq Profile</span>
-                <span class="sig-sep" aria-hidden="true">→</span>
-                <span>EBU R128 (-16 LUFS)</span>
-                <span class="sig-sep" aria-hidden="true">→</span>
-                <span>10-Band EQ</span>
-                <span class="sig-sep" aria-hidden="true">→</span>
-                <span>True-Peak Limiter</span>
-                <span class="sig-sep" aria-hidden="true">→</span>
-                <span class="sig-out">Core Audio Output</span>
+            <div class="control-group">
+              <span class="control-label">Pick a color theme (or build your own)</span>
+              <div class="chip-row" role="group" aria-label="Visualizer color palette" data-viz-palettes>
+                <button type="button" class="chip is-active" data-palette="elysonic" aria-pressed="true">Elysonic</button>
+                <button type="button" class="chip" data-palette="ocean" aria-pressed="false">Ocean</button>
+                <button type="button" class="chip" data-palette="aurora" aria-pressed="false">Aurora</button>
+                <button type="button" class="chip" data-palette="ember" aria-pressed="false">Ember</button>
+                <button type="button" class="chip" data-palette="synthwave" aria-pressed="false">Synthwave</button>
+                <button type="button" class="chip" data-palette="phosphor" aria-pressed="false">Phosphor</button>
               </div>
             </div>
           </div>
 
-          <aside class="console-side">
-            <a class="window-frame eq-detail-frame" href="assets/eq-detail.webp" data-lightbox data-title="Elysonic 10-band Equalizer panel with Solaris visualizer">
-              <img src="assets/eq-detail.webp" width="680" height="1914" loading="lazy" alt="Close-up of Elysonic's 10-band equalizer with Solaris harmonic ring visualizer, band sliders, before-and-after song waveform, and Office Desk setup">
-            </a>
-          </aside>
+          <div class="console-bonus">
+            <strong>Bonus live Screen Saver included:</strong>
+            <span>Turn your resting display into any of these 8 music visualizers while songs play.</span>
+          </div>
         </div>
 
-        <!-- EQ INHERITANCE + AUDIO FEATURES -->
+        <!-- 3 CALM SOUND CARDS -->
         <div class="sound-pillars">
-          <article class="pillar-card pillar-cascade">
-            <div class="pillar-head">
-              <span class="mono-tag">EQ Inheritance</span>
-              <h3>Overrides that cascade the way you think</h3>
-            </div>
+          <article class="pillar-card">
+            <span class="card-kicker">Even Volume</span>
+            <h3>No more surprise loud songs</h3>
             <p>
-              Save a complete EQ curve for a single song, a whole album, a specific DAC or headphone output, or all music.
-              Playback checks from most specific to broadest, and even a saved flat override takes precedence. Remove an override and the next layer takes over.
-            </p>
-            <div class="cascade-chain" role="group" aria-label="EQ precedence order">
-              <button type="button" class="cascade-node is-active" data-cascade="song">
-                <span class="cascade-rank">1</span>
-                <strong>Song</strong>
-                <span>Wins first</span>
-              </button>
-              <span class="cascade-arrow" aria-hidden="true">→</span>
-              <button type="button" class="cascade-node" data-cascade="album">
-                <span class="cascade-rank">2</span>
-                <strong>Album</strong>
-                <span>Record curve</span>
-              </button>
-              <span class="cascade-arrow" aria-hidden="true">→</span>
-              <button type="button" class="cascade-node" data-cascade="output">
-                <span class="cascade-rank">3</span>
-                <strong>Output</strong>
-                <span>Per device</span>
-              </button>
-              <span class="cascade-arrow" aria-hidden="true">→</span>
-              <button type="button" class="cascade-node" data-cascade="all">
-                <span class="cascade-rank">4</span>
-                <strong>All Music</strong>
-                <span>Default</span>
-              </button>
-            </div>
-            <p class="cascade-note" id="cascade-note">
-              Active rule: Song EQ overrides everything below it, even when you save a flat curve for a bright mastering.
+              Old CDs are quiet. New records are loud. Even Volume keeps every song at a comfortable level automatically, while keeping quiet intros and big choruses natural when you listen to an album straight through.
             </p>
           </article>
 
           <article class="pillar-card">
-            <span class="mono-tag">Even Volume</span>
-            <h3>EBU R128 loudness that respects albums</h3>
+            <span class="card-kicker">Easy to Tune</span>
+            <h3>Simple controls, deep when you want it</h3>
             <p>
-              Choose Off, Same for every song, Albums as made, or Automatic. Automatic preserves quiet-to-loud pacing when you play an album in order, then switches to track leveling on shuffle. Dial targets from -23 to -14 LUFS, respect ReplayGain tags, and guard peaks with a true-peak limiter.
+              Start with Bass, Middle, and Treble. A full 10-band equalizer, headphone comfort blend, and saved speaker or headphone setups are built right in whenever you want finer control.
             </p>
           </article>
 
           <article class="pillar-card">
-            <span class="mono-tag">Headphones &amp; Outputs</span>
-            <h3>AutoEq profiles, Crossfeed &amp; Setups</h3>
+            <span class="card-kicker">Listening Room &amp; Mini Player</span>
+            <h3>Big screen or tucked in a corner</h3>
             <p>
-              Import an AutoEq or Equalizer APO <code>ParametricEQ.txt</code> profile per output, applied before your listening EQ. Soften harsh hard-panned stereo with Light, Medium, or Strong headphone blend, adjust per-output L/R balance, and recall complete Listening Setups via ⌘K.
-            </p>
-          </article>
-
-          <article class="pillar-card">
-            <span class="mono-tag">Sound Path &amp; Mini Player</span>
-            <h3>See every stage of your audio signal</h3>
-            <p>
-              Open Sound Path in Advanced EQ to verify active output negotiation, format conversion, correction, loudness, and EQ in real time. Or pop out the Keep-on-Top Mini Player with seek strip, favorite heart, and live EQ backdrop.
+              Open the full-screen Listening Room for big album art and live visuals, pop out the compact Mini Player while you work, or switch on Karaoke Mode to lower vocals and sing along with saved lyrics.
             </p>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- ACT II: ALBUM JOURNEYS & CONNECTIONS -->
+    <!-- CORE 3: REDISCOVER & KEEP IT SAFE -->
+    <section id="care" class="section discovery-section" aria-labelledby="care-title">
+      <div class="shell">
+        <div class="section-head">
+          <p class="kicker">Rediscover &amp; Keep It Safe</p>
+          <h2 id="care-title">Fall back in love with the <span class="serif-accent">albums you forgot.</span></h2>
+          <p class="section-lead">
+            Hear overlooked records again with personal stations made from your own library, and tidy up messy folders without worrying about breaking a single file.
+          </p>
+        </div>
+
+        <div class="care-layout">
+          <!-- INTERACTIVE DISCOVERY DIAL -->
+          <article class="station-card">
+            <div class="station-head">
+              <span class="card-kicker">Personal Stations</span>
+              <h3>Your own radio, made from your music</h3>
+              <p>
+                Pick any song, artist, or genre and Elysonic keeps playing music from your collection that fits. Slide the dial toward familiar favorites or forgotten deep cuts, and use thumbs up or down to guide what plays next.
+              </p>
+            </div>
+
+            <div class="dial-widget">
+              <div class="dial-header">
+                <label for="discovery-dial" class="control-label">Try the Discovery Dial</label>
+                <span class="dial-badge" id="dial-mode-label">Balanced Mix</span>
+              </div>
+              <input id="discovery-dial" class="dial-slider" type="range" min="0" max="100" value="50" aria-describedby="dial-mode-desc">
+              <div class="dial-scale" aria-hidden="true">
+                <span>Familiar</span>
+                <span>Balanced</span>
+                <span>Deep Cuts</span>
+              </div>
+              <p class="dial-desc" id="dial-mode-desc">
+                Blends favorite songs near your starting song with unplayed album cuts from related genres. Downvoted songs move to Played less.
+              </p>
+            </div>
+
+            <div class="mini-grid-2">
+              <div>
+                <h4>Smart playlists</h4>
+                <p>Build playlists that update themselves from simple rules, or bring in standard playlist files anytime.</p>
+              </div>
+              <div>
+                <h4>Rediscover shelves</h4>
+                <p>Surfaces great albums sitting in your library that you haven't played in years.</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- BALANCED 2x2 CARE & SAFETY GRID -->
+          <div class="care-grid">
+            <article class="pillar-card">
+              <span class="card-kicker">Keep It Tidy</span>
+              <h3>Spot duplicates &amp; messy names</h3>
+              <p>
+                Flagged gathers duplicate songs, artists spelled two different ways, moved files, and broken tracks in one place. Listen to copies side by side and Undo fixes anytime.
+              </p>
+            </article>
+
+            <article class="pillar-card">
+              <span class="card-kicker">Safe Edits &amp; Covers</span>
+              <h3>Fix details &amp; drop in covers</h3>
+              <p>
+                Drag any cover picture onto an album, give every disc in a box set its own artwork, or join split albums. Your original music files stay untouched unless you choose to update them.
+              </p>
+            </article>
+
+            <article class="pillar-card">
+              <span class="card-kicker">Daily Backups</span>
+              <h3>Automatic backups, no cloud bill</h3>
+              <p>
+                Your library, playlists, listening history, and chosen covers are backed up automatically every day (7 copies kept), with a safety copy created before any restore.
+              </p>
+            </article>
+
+            <article class="pillar-card">
+              <span class="card-kicker">Free Radio</span>
+              <h3>Live stations whenever you're online</h3>
+              <p>
+                Tune into thousands of live internet radio stations around the world right inside Elysonic, filter by genre or country, and bookmark favorites with no account.
+              </p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- THE COST: IT'S FREE (CLEAN EXIT POINT FOR EVERYDAY LISTENERS)         -->
+    <!-- ===================================================================== -->
+    <section id="cost" class="section cost-section" aria-labelledby="cost-title">
+      <div class="shell">
+        <div class="cost-card">
+          <div class="cost-hero">
+            <span class="part-chip part-chip-free">The Cost</span>
+            <div class="cost-price-row">
+              <span class="cost-figure">$0</span>
+              <span class="cost-word">Free.</span>
+            </div>
+            <h2 id="cost-title">
+              To free your music,<br>
+              <span class="serif-accent">you need a free music player.</span>
+            </h2>
+            <p class="cost-manifesto">
+              It's 2026, for god's sake. Playing music you already paid for on a computer you already own ain't rocket science.
+            </p>
+            <p class="cost-explain">
+              No monthly subscription. No account wall. No "Pro" upgrade locking away the equalizer, karaoke mode, or backups.
+              Download it, point it at your music, and enjoy your collection.
+            </p>
+            <div class="cost-actions">
+              <a class="btn btn-primary" href="https://github.com/cjboco/elysonic-releases/releases/latest" data-download-latest>
+                Free Download
+                <span aria-hidden="true">↓</span>
+              </a>
+              <span class="cost-meta-note">No subscription cost · macOS 14+ (Apple M1 or newer) · More platforms coming</span>
+            </div>
+          </div>
+
+          <div class="cost-pillars">
+            <div class="cost-pillar">
+              <span class="card-kicker card-kicker-mint">Free Download</span>
+              <h3>Nothing held back</h3>
+              <p>Listening Room, Karaoke Mode, equalizer, 8 visualizers, Apple Music folder support, smart playlists, tidy-up tools, and daily backups are all included.</p>
+            </div>
+            <div class="cost-pillar">
+              <span class="card-kicker card-kicker-mint">No Account</span>
+              <h3>No sign-in screen</h3>
+              <p>You don't need to create an account, hand over an email address, or rent your own albums back from a cloud server.</p>
+            </div>
+            <div class="cost-pillar">
+              <span class="card-kicker card-kicker-mint">Your Music Stays Yours</span>
+              <h3>Offline by default</h3>
+              <p>Your library runs right on your computer with zero internet required. Walk away anytime with all your files untouched.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SPACIOUS THRESHOLD PAUSE                                              -->
+    <!-- ===================================================================== -->
+    <section id="ready-for-power" class="power-interlude" aria-labelledby="interlude-title">
+      <div class="shell">
+        <div class="interlude-inner">
+          <p class="interlude-kicker">Happy with a simple, free music player? You can stop right here.</p>
+          <h2 id="interlude-title">
+            Are you ready for <span class="serif-accent">the power?</span>
+          </h2>
+          <p class="interlude-sub">
+            Everything below starts turned off. Bring your own databases, keys, or AI.
+          </p>
+          <a class="interlude-cue" href="#unlock" aria-label="Scroll to unlockable power features">
+            <span>See what you can unlock</span>
+            <span class="interlude-arrow" aria-hidden="true">↓</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- BOTTOM HALF: UNLOCK THE POWER (BRING YOUR OWN APIs, DATABASES & AI)   -->
+    <!-- ===================================================================== -->
+    <section id="unlock" class="part-banner part-banner-unlock" aria-labelledby="unlock-title">
+      <div class="shell">
+        <div class="part-banner-inner">
+          <div class="part-banner-label">
+            <span class="part-chip part-chip-unlock">Power Features · Off by Default</span>
+            <span class="part-status">You enable them · You provide your own APIs &amp; AI</span>
+          </div>
+          <h2 id="unlock-title">
+            Bring your own APIs.<br>
+            <span class="serif-accent">Unlock everything else.</span>
+          </h2>
+          <p class="part-banner-lead">
+            Every online lookup service, music database, and AI feature below starts turned off. Elysonic holds zero API keys of its own, runs no servers, and never phones home behind your back.
+            Open Settings, turn on only the services you want, and plug in your own free accounts, personal API keys, or local AI.
+          </p>
+        </div>
+
+        <!-- 3-LEVEL UNLOCK MAP -->
+        <div class="unlock-matrix" aria-label="Three ways to unlock power features">
+          <article class="unlock-tier">
+            <div class="unlock-tier-top">
+              <span class="tier-step">1 · Flip a Switch</span>
+              <span class="tier-cost">Free · No API key needed</span>
+            </div>
+            <h3>Community music databases</h3>
+            <p class="tier-intro">Start off until you turn them on in Settings › Online services and approve what leaves your computer.</p>
+            <ul class="provider-list">
+              <li>
+                <strong>MusicBrainz &amp; Cover Art Archive</strong>
+                <span>Release edition checks, missing track audits, discography gaps, Music Tree, Five Degrees, and missing album covers.</span>
+              </li>
+              <li>
+                <strong>Wikipedia &amp; Wikidata</strong>
+                <span>Artist biographies, band member histories, and Wikimedia Commons photo pickers.</span>
+              </li>
+              <li>
+                <strong>LRCLIB</strong>
+                <span>Automatic synced lyrics lookup for songs without embedded lyrics, plus optional sharing of your timed edits.</span>
+              </li>
+            </ul>
+          </article>
+
+          <article class="unlock-tier">
+            <div class="unlock-tier-top">
+              <span class="tier-step">2 · Provide Your Own Key</span>
+              <span class="tier-cost">Your free personal token · Keychain</span>
+            </div>
+            <h3>Bring your own API keys</h3>
+            <p class="tier-intro">Create your own free personal token with the service and paste it into Settings. Keys stay strictly inside your system Keychain.</p>
+            <ul class="provider-list">
+              <li>
+                <strong>Discogs</strong>
+                <span>Deep pressing and edition lookup plus high-resolution release cover candidates.</span>
+              </li>
+              <li>
+                <strong>AcoustID</strong>
+                <span>Identify mystery songs by how they sound. Computes a fingerprint locally and never uploads audio.</span>
+              </li>
+              <li>
+                <strong>fanart.tv</strong>
+                <span>Extra high-resolution album covers and artist photography.</span>
+              </li>
+              <li>
+                <strong>Spotify &amp; Callasso</strong>
+                <span>Read-only Spotify playlist import (using your own free Spotify developer Client ID) and optional nearby concerts via Callasso, an app from the makers of Elysonic.</span>
+              </li>
+            </ul>
+          </article>
+
+          <article class="unlock-tier unlock-tier-ai">
+            <div class="unlock-tier-top">
+              <span class="tier-step">3 · Provide Your Own AI</span>
+              <span class="tier-cost">Local ($0) or Cloud API Key</span>
+            </div>
+            <h3>Bring your own AI &amp; MCP</h3>
+            <p class="tier-intro">Run open models locally for $0, or paste your own cloud API key (billed directly by your provider within daily caps you set).</p>
+            <ul class="provider-list">
+              <li>
+                <strong>Ollama &amp; LM Studio (Local)</strong>
+                <span>Run local models right on your machine with zero per-token bills and full privacy.</span>
+              </li>
+              <li>
+                <strong>Anthropic, OpenAI, Google, xAI, Mistral</strong>
+                <span>Paste your own API key, assign different models by job, set fallback order, and cap daily background use.</span>
+              </li>
+              <li>
+                <strong>Local Vocal &amp; Whisper Models + MCP</strong>
+                <span>Optional on-device lyric alignment models, plus a local MCP server to connect Claude Desktop and other AI clients.</span>
+              </li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="byok-callout">
+          <strong>Why does bringing your own APIs matter?</strong>
+          Because we never sit in the middle. Elysonic runs no proxy servers, charges no subscription, marks up zero AI tokens, and never touches your keys outside your Keychain. You unlock as much power as you want, and you still pay us $0.
+        </div>
+      </div>
+    </section>
+
+    <!-- POWER 1: ALBUM JOURNEYS, MUSIC TREE & FIVE DEGREES -->
     <section id="journeys" class="section journey-section" aria-labelledby="journey-title">
       <div class="shell">
         <div class="journey-grid">
           <div class="journey-editorial">
-            <p class="kicker kicker-gold">Act II · Album Journeys</p>
+            <div class="unlock-req-row">
+              <span class="inline-badge badge-unlock">Requires: Complete Artist Discography + MusicBrainz + Wikipedia + Your Own AI</span>
+            </div>
+            <p class="kicker kicker-gold">Unlocked · Album Journeys</p>
             <h2 id="journey-title">Hear the story behind <span class="serif-accent">every era</span> you own.</h2>
             <p class="section-lead">
-              Album Journeys turns a complete studio discography into an interactive, narrated documentary played straight from your own files.
+              Enable online lookup and connect your own local or cloud AI, and Album Journeys turns a complete studio discography into an interactive, narrated documentary played straight from your own files.
             </p>
             <p class="body-copy">
-              Each chapter pairs source-backed writing, credits, related events, and band photography with a synchronized timeline of narration and tracks from your library. Pick a narrator and pace, or read along silently. When you finish, Elysonic returns your main queue right where you left it.
+              Journeys build quietly in the background and appear once every chapter is finished. Each chapter pairs source-backed writing, credits, related events, and band photography with a synchronized timeline of narration and tracks from your library. Local AI costs $0; cloud AI bills to your own provider account within the daily cap you set. (Apple Music read-only users pick a folder of their own for journeys.)
             </p>
 
             <ul class="feature-bullets">
               <li>
-                <strong>Automatic eligibility &amp; Wishlist.</strong>
-                Browse completed journeys, works in progress, and artists on the "Almost there" shelf who are one or two missing records away.
+                <strong>Earned by owning the records.</strong>
+                Browse completed journeys, works in progress, and artists on the "Almost there" shelf who are one or two missing albums away.
               </li>
               <li>
                 <strong>Shareable <code>.elyjourney</code> files.</strong>
                 Export a finished journey with stories, credits, and playback cues. Friends open it as a separate telling powered by their own local music library.
               </li>
               <li>
-                <strong>Full editorial pipeline &amp; Compare Tellings.</strong>
-                Research, direction, writing, editing, and art direction keep source attribution attached, and you can compare tellings across configured assistants.
+                <strong>Multi-model editorial pipeline &amp; Compare Tellings.</strong>
+                Assign different AI models to research, writing, and editing, keep source citations attached, and compare tellings across assistants you configured.
               </li>
             </ul>
           </div>
 
           <figure class="journey-media">
-            <a class="window-frame journey-frame" href="assets/journey.webp" data-lightbox data-title="Album Journey: Pinkerton chapter">
+            <a class="window-frame journey-frame" href="assets/journey-dark.webp" data-lightbox data-title="Album Journey: Pinkerton chapter">
               <picture>
                 <source media="(max-width: 600px)" srcset="assets/journey-detail.webp">
-                <img src="assets/journey.webp" width="1800" height="1548" loading="lazy" alt="Weezer performing live in the Pinkerton chapter of an Album Journey, with chapter timeline and Play album control below">
+                <img src="assets/journey-dark.webp" width="1800" height="1548" loading="lazy" alt="Weezer performing live in the Pinkerton chapter of an Album Journey, with dark chapter timeline and Play album control below">
               </picture>
             </a>
             <figcaption class="media-caption">
@@ -476,22 +559,22 @@
         <div class="universe-grid">
           <article class="universe-card universe-tree">
             <div class="universe-copy">
-              <span class="mono-tag">Music Tree</span>
-              <h3>Map every band member, side project, and instrument</h3>
+              <span class="inline-badge badge-unlock">Requires: MusicBrainz + Wikipedia</span>
+              <h3>Music Tree: map every band member and side project</h3>
               <p>
                 Explore sourced band lineages as a visual graph or structured list. Click any musician to re-center the tree, inspect shared instruments and years, check evidence, and spin a playlist straight out of the family tree.
               </p>
             </div>
             <figure class="universe-shot">
-              <a class="window-frame" href="assets/music-tree.webp" data-lightbox data-title="Pearl Jam in the redesigned Music Tree">
-                <img src="assets/music-tree-detail.webp" width="1200" height="834" loading="lazy" alt="Pearl Jam members, side projects, and studio producers mapped in Elysonic's redesigned Music Tree graph">
+              <a class="window-frame" href="assets/music-tree.webp" data-lightbox data-title="Pearl Jam in the Music Tree">
+                <img src="assets/music-tree-detail.webp" width="1200" height="834" loading="lazy" alt="Pearl Jam members, side projects, and studio producers mapped in Elysonic's Music Tree graph, with library and MusicBrainz legend along the bottom">
               </a>
             </figure>
           </article>
 
           <article class="universe-card universe-degrees">
-            <span class="mono-tag">Five Degrees · Explore &amp; Challenge</span>
-            <h3>Six degrees of separation for your record shelf</h3>
+            <span class="inline-badge badge-unlock">Requires: MusicBrainz + Wikipedia (+ Callasso for shows)</span>
+            <h3>Five Degrees, Discography &amp; Concerts</h3>
             <p>
               Trace evidence-backed paths between any two artists in Explore mode, save your routes, and build playlists from the trail. Or switch to Challenge mode and race to connect two artists with hints when you get stuck.
             </p>
@@ -518,7 +601,7 @@
               </div>
               <div>
                 <strong>About &amp; Concerts</strong>
-                <span>Wikipedia/Wikidata bios, photo pickers, and optional nearby show listings by city and radius.</span>
+                <span>Wikipedia/Wikidata bios, photo pickers, and optional nearby show listings by city and radius via Callasso (from the makers of Elysonic).</span>
               </div>
             </div>
           </article>
@@ -526,136 +609,77 @@
       </div>
     </section>
 
-    <!-- ACT III: LYRICS, KARAOKE & VOCAL TIMELINE EDITOR -->
-    <section id="lyrics" class="section lyrics-section" aria-labelledby="lyrics-title">
+    <!-- POWER 2: ONLINE LOOKUP, AI ASSISTANT, LOCAL VOCAL LYRICS & MCP -->
+    <section id="power-tools" class="section privacy-section" aria-labelledby="power-tools-title">
       <div class="shell">
         <div class="section-head">
-          <p class="kicker">Act III · Lyrics, Karaoke &amp; Timing Studio</p>
-          <h2 id="lyrics-title">Synced down to the <span class="serif-accent">syllable.</span><br>Ready for Karaoke.</h2>
+          <p class="kicker kicker-gold">Unlocked · Lookup, AI, Auto-Lyrics &amp; MCP</p>
+          <h2 id="power-tools-title">Plug in a provider.<br><span class="serif-accent">Watch the rest of Elysonic wake up.</span></h2>
           <p class="section-lead">
-            Follow embedded ID3 SYLT tags, sidecars, or LRCLIB lyrics in sync, launch full-screen Karaoke Mode with real-time vocal reduction, or open a dedicated vocal timeline editor that rivals a DAW.
+            Every integration explains what leaves your computer before you turn it on. Enable one, enable all of them, or leave every single one off.
           </p>
         </div>
 
-        <div class="lyrics-showcase">
-          <figure class="lyrics-card">
-            <a class="window-frame" href="assets/lyrics-playback-native.webp" data-lightbox data-title="Syllable-synced lyrics during playback">
-              <picture>
-                <source media="(max-width: 600px)" srcset="assets/lyrics-playback-pane.webp">
-                <img src="assets/lyrics-playback-native.webp" width="1800" height="1138" loading="lazy" alt="Elysonic highlighting individual syllables in the Lyrics panel as The Good Life plays">
-              </picture>
-            </a>
-            <figcaption class="media-caption">
-              <span>Live word and syllable highlighting using Enhanced LRC (<code>elyric</code>)</span>
-              <span>Local edits stored in library</span>
-            </figcaption>
-          </figure>
+        <div class="unlock-feature-grid">
+          <article class="privacy-card">
+            <span class="inline-badge badge-unlock">MusicBrainz · Discogs · AcoustID · fanart.tv</span>
+            <h3>Edition lookup, audio fingerprinting &amp; batch covers</h3>
+            <p>
+              Turn on online lookup in Settings › Online services to expand Flagged, Tags, and the Artwork Desk:
+            </p>
+            <ul class="compact-list">
+              <li>Match exact pressings and editions via MusicBrainz and Discogs, or paste a release link directly</li>
+              <li>Fingerprint untagged tracks locally with AcoustID (your audio file never uploads)</li>
+              <li>Compare Cover Art Archive, Discogs, and fanart.tv covers side by side and fix up to 100 missing albums per batch</li>
+              <li>Run artist-wide Check Albums audits for missing tracks, wrong numbers, and release gaps</li>
+            </ul>
+          </article>
 
-          <figure class="lyrics-card">
-            <a class="window-frame" href="assets/lyrics-editor-native.webp" data-lightbox data-title="Elysonic Lyrics Editor timeline">
-              <picture>
-                <source media="(max-width: 600px)" srcset="assets/lyrics-editor-timeline.webp">
-                <img src="assets/lyrics-editor-native.webp" width="1800" height="1180" loading="lazy" alt="Elysonic Lyrics Editor with separate Voice and Music waveforms, playhead, and draggable word blocks">
-              </picture>
-            </a>
-            <figcaption class="media-caption">
-              <span>Separated Voice &amp; Music lanes with magnetic onset snapping</span>
-              <span>Manual text mode &amp; LRCLIB sharing</span>
-            </figcaption>
-          </figure>
-        </div>
+          <article class="privacy-card">
+            <span class="inline-badge badge-unlock">Ollama · LM Studio · Cloud AI API Keys</span>
+            <h3>In-app AI assistant, genre tagging &amp; playlist picks</h3>
+            <p>
+              Connect a local model or paste your own key for Anthropic, OpenAI, Google, xAI, or Mistral in Settings › Assistants:
+            </p>
+            <ul class="compact-list">
+              <li>Chat with your collection, queue songs, build playlists, and ask for library cleanups</li>
+              <li>Reads and playback run immediately; every library, tag, or file edit asks Yes/No first</li>
+              <li>Classify missing genres and moods in batches, and get MusicBrainz-verified playlist suggestions</li>
+              <li>Assign different models per job, set fallback order, and cap daily background usage</li>
+            </ul>
+          </article>
 
-        <div class="spec-quad">
-          <div class="spec-item">
-            <h3>Karaoke Mode &amp; vocal reduction</h3>
-            <p>Fill the window or enter native full screen with four lyric sizes, 3-2-1 lead-in countdowns, live vocal reduction, per-song ±5s timing nudge, and an automatic Up Next singer cue.</p>
-          </div>
-          <div class="spec-item">
-            <h3>Local vocal isolation &amp; Whisper</h3>
-            <p>Install the optional local models to isolate vocals, align existing lyrics automatically, or transcribe singing with Whisper. Your audio never leaves the Mac.</p>
-          </div>
-          <div class="spec-item">
-            <h3>Syllable boundaries &amp; onset snap</h3>
-            <p>Drag word starts and ends with smooth edge scrolling, split syllables, and use Line up with the singing to lock words right onto detected vocal transients.</p>
-          </div>
-          <div class="spec-item">
-            <h3>Pitch-locked auditioning &amp; LRCLIB</h3>
-            <p>Scrub with audible snippets, loop tricky words, mute music to hear pure vocals, slow playback to 3/4 or 1/2 speed without pitch shift, and share Enhanced LRC back to LRCLIB.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ACT IV: DISCOVERY, STATIONS & RADIO -->
-    <section id="discovery" class="section discovery-section" aria-labelledby="discovery-title">
-      <div class="shell">
-        <div class="section-head">
-          <p class="kicker">Act IV · Rediscovery, Playlists &amp; Radio</p>
-          <h2 id="discovery-title">Fall back in love with the <span class="serif-accent">albums you forgot.</span></h2>
-          <p class="section-lead">
-            Spin infinite stations out of your own library, build live smart playlists across 13 rule fields, browse forgotten shelves, or tune into thousands of global internet radio streams.
-          </p>
-        </div>
-
-        <div class="discovery-layout">
-          <!-- INTERACTIVE LIBRARY STATION DIAL -->
-          <article class="station-card">
-            <div class="station-head">
-              <span class="mono-tag">Library Stations</span>
-              <h3>Your library, dialed in</h3>
-              <p>
-                Seed a continuous queue from any song, artist, or genre. Turn the Discovery Dial to steer between familiar favorites and overlooked deep cuts, then shape future picks with up and down votes.
-              </p>
-            </div>
-
-            <div class="dial-widget">
-              <div class="dial-header">
-                <label for="discovery-dial" class="control-label">Discovery Dial</label>
-                <span class="mono-tag" id="dial-mode-label">Balanced Mix</span>
-              </div>
-              <input id="discovery-dial" class="dial-slider" type="range" min="0" max="100" value="50" aria-describedby="dial-mode-desc">
-              <div class="dial-scale" aria-hidden="true">
-                <span>Familiar</span>
-                <span>Balanced</span>
-                <span>Deep Cuts</span>
-              </div>
-              <p class="dial-desc" id="dial-mode-desc">
-                Blends loved tracks near your seed with unplayed album cuts from adjacent genres. Downvoted songs move to Played less.
-              </p>
-            </div>
-
-            <div class="mini-grid-2">
-              <div>
-                <h4>Smart Playlists (13 fields)</h4>
-                <p>Match all or any rules for genre, year, rating, plays, heart, vote, last played, date added, and file type with live count/duration preview and artist spacing.</p>
-              </div>
-              <div>
-                <h4>Import &amp; Export</h4>
-                <p>Import playlists and play counts directly from Apple Music via macOS (no manual XML export needed), or bring in M3U8, PLS, XSPF, CSV, Music XML, and read-only Spotify playlists matched to your local files.</p>
-              </div>
-              <div>
-                <h4>Rediscover &amp; Genres</h4>
-                <p>Dedicated shelves resurface neglected records with reasons shown. Include or exclude genres before shuffling and save any filter as a smart playlist.</p>
-              </div>
-              <div>
-                <h4>AI Playlist Suggestions</h4>
-                <p>Optional assistant recommendations verified against MusicBrainz. Accept, reject, undo, or mark missing albums wanted.</p>
-              </div>
+          <article class="privacy-card">
+            <span class="inline-badge badge-unlock">Local MCP Server · Spotify Client ID</span>
+            <h3>Connect Claude Desktop &amp; import Spotify lists</h3>
+            <p>
+              Turn on the bundled local MCP server in Settings › Other apps to connect Claude Desktop or other AI clients under granular permission tiers and a live activity log. Want to rescue old playlists from Spotify? Supply your own free Spotify developer Client ID to import playlists read-only and match them to your local files.
+            </p>
+            <div class="tier-pills" aria-label="MCP permission tiers">
+              <span>Search &amp; Now Playing</span>
+              <span>+ History</span>
+              <span>+ Playback</span>
+              <span>+ Playlists</span>
+              <span>+ Tag Review</span>
+              <span>+ Covers</span>
             </div>
           </article>
 
-          <!-- INTERNET RADIO -->
-          <article class="radio-card">
+          <!-- VOICE/MUSIC LYRIC TIMING STUDIO (LOCAL MODELS + LRCLIB) -->
+          <article class="radio-card radio-card-wide">
             <figure>
-              <a class="window-frame" href="assets/radio.webp" data-lightbox data-title="Elysonic Internet Radio browser and saved stations">
-                <img src="assets/radio.webp" width="1800" height="1138" loading="lazy" alt="Elysonic Internet Radio view with saved stations and live Radio Browser directory filtered by genre, country, and language">
+              <a class="window-frame" href="assets/lyrics-editor-native.webp" data-lightbox data-title="Lyrics Editor with separated Voice and Music waveforms">
+                <picture>
+                  <source media="(max-width: 600px)" srcset="assets/lyrics-editor-timeline.webp">
+                  <img src="assets/lyrics-editor-native.webp" width="1800" height="1180" loading="lazy" alt="Elysonic Lyrics Editor showing separated Voice and Music lanes, playhead, and draggable word blocks">
+                </picture>
               </a>
             </figure>
             <div class="radio-body">
-              <span class="mono-tag">Internet Radio</span>
-              <h3>Live global stations, zero accounts</h3>
+              <span class="inline-badge badge-unlock">LRCLIB · Optional Local Vocal &amp; Whisper Models</span>
+              <h3>Automatic synced lyrics &amp; Voice/Music timing studio</h3>
               <p>
-                Browse the Radio Browser directory by search, genre, country, or language. Bookmark favorites, enjoy buffered playback with automatic reconnect on drops, and see live station track titles as they air.
+                Turn on LRCLIB to fetch synced lyrics automatically and optionally share your timed edits back. Download the optional local vocal-isolation and Whisper models in Settings › Online services to split Voice and Music lanes, align lyrics to singing on-device, scrub with audible snippets, and slow playback without pitch shift. Your audio never leaves your computer.
               </p>
             </div>
           </article>
@@ -663,243 +687,29 @@
       </div>
     </section>
 
-    <!-- ACT V: COLLECTOR'S WORKSHOP (REPAIR, ARTWORK, IMPORT, BACKUPS) -->
-    <section id="workshop" class="section workshop-section" aria-labelledby="workshop-title">
-      <div class="shell">
-        <div class="section-head">
-          <p class="kicker">Act V · The Collector's Workshop</p>
-          <h2 id="workshop-title">Fix decades of messy folders <span class="serif-accent">without fear.</span></h2>
-          <p class="section-lead">
-            Every long-running music library accumulates duplicates, split compilations, missing covers, and spelling drift. Elysonic gives you purpose-built repair desks with previews, safety snapshots, and Undo.
-          </p>
-        </div>
-
-        <div class="workshop-shell" data-tabs>
-          <div class="workshop-tabs" role="tablist" aria-label="Library repair and maintenance workflows">
-            <button type="button" class="w-tab is-active" role="tab" aria-selected="true" aria-controls="w-panel-flagged" id="w-tab-flagged" data-w-tab="flagged">
-              <strong>Flagged</strong>
-              <span>6-card repair desk</span>
-            </button>
-            <button type="button" class="w-tab" role="tab" aria-selected="false" aria-controls="w-panel-tags" id="w-tab-tags" data-w-tab="tags">
-              <strong>Tags &amp; Lookup</strong>
-              <span>Editions, credits &amp; writes</span>
-            </button>
-            <button type="button" class="w-tab" role="tab" aria-selected="false" aria-controls="w-panel-artwork" id="w-tab-artwork" data-w-tab="artwork">
-              <strong>Artwork Desk</strong>
-              <span>Batch covers &amp; box sets</span>
-            </button>
-            <button type="button" class="w-tab" role="tab" aria-selected="false" aria-controls="w-panel-backups" id="w-tab-backups" data-w-tab="backups">
-              <strong>Backups &amp; Transfer</strong>
-              <span>Encrypted offsite &amp; migration</span>
-            </button>
-          </div>
-
-          <div class="workshop-panels">
-            <!-- TAB 1: FLAGGED -->
-            <div class="w-panel is-active" id="w-panel-flagged" role="tabpanel" aria-labelledby="w-tab-flagged" data-w-panel="flagged">
-              <div class="w-panel-intro">
-                <h3>Flagged: every library problem in one place</h3>
-                <p>
-                  No more hunting through thousands of folders. Flagged gathers six concrete categories of library drift, lets you audition copies side by side, logs every fix in Changes, and supports Undo.
-                </p>
-              </div>
-              <div class="flagged-grid">
-                <div class="flag-card">
-                  <span class="flag-num">01</span>
-                  <h4>Songs you have twice</h4>
-                  <p>Compare bitrates and formats, preview audio, keep the best master, or set extra copies aside.</p>
-                </div>
-                <div class="flag-card">
-                  <span class="flag-num">02</span>
-                  <h4>Songs with another name online</h4>
-                  <p>Review AcoustID fingerprints and MusicBrainz matches before accepting or declining a title.</p>
-                </div>
-                <div class="flag-card">
-                  <span class="flag-num">03</span>
-                  <h4>Artists spelled more than one way</h4>
-                  <p>Merge inconsistent spellings in one click or mark intentional variants to stay separate.</p>
-                </div>
-                <div class="flag-card">
-                  <span class="flag-num">04</span>
-                  <h4>Songs whose files are gone</h4>
-                  <p>Reconnect a moved folder or file, switch to a known copy, or clean up dead entries.</p>
-                </div>
-                <div class="flag-card">
-                  <span class="flag-num">05</span>
-                  <h4>Songs whose files kept old details</h4>
-                  <p>Inspect failed or skipped file tag writes, retry cleanly, or keep edits library-only.</p>
-                </div>
-                <div class="flag-card">
-                  <span class="flag-num">06</span>
-                  <h4>Songs that won't play</h4>
-                  <p>Surface corrupt or unreadable audio files to reveal in Finder or move safely to Trash.</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- TAB 2: TAGS, LOOKUP & IMPORT -->
-            <div class="w-panel" id="w-panel-tags" role="tabpanel" aria-labelledby="w-tab-tags" data-w-panel="tags" hidden>
-              <div class="w-panel-intro">
-                <h3>Non-destructive edits, release audits &amp; safe file writes</h3>
-                <p>
-                  Library corrections persist across rescans without mutating your audio files until you ask. When you are ready to write tags to disk, Elysonic previews an exact write plan first.
-                </p>
-              </div>
-              <div class="w-two-col">
-                <div class="w-detail-box">
-                  <h4>Album Lookup &amp; Identify</h4>
-                  <p>Match exact editions via MusicBrainz, Discogs, and local AcoustID acoustic fingerprinting. Audition tracks, inspect missing or repeated track numbers, paste release links directly, or run an artist-wide Check Albums report.</p>
-                </div>
-                <div class="w-detail-box">
-                  <h4>Advanced Editing &amp; Classical Works</h4>
-                  <p>Lock individual fields against overwrite, revert values to source tags, edit full production credits and mix info, rename discs, and group classical works and movements natively on album pages.</p>
-                </div>
-                <div class="w-detail-box">
-                  <h4>Drag-and-Drop Import &amp; CUE Splitting</h4>
-                  <p>Drop any folder onto Elysonic to preview tracks, covers, and optional lookup before copying into a music root. Split whole-disc CUE albums into individual songs, or Smart Replace an existing release while keeping ratings and play history.</p>
-                </div>
-                <div class="w-detail-box">
-                  <h4>Multi-Disc Grouping &amp; Join Albums</h4>
-                  <p>Logically join split discs (or split them back apart) with individual disc headers and covers. Or physically consolidate scattered compilation tracks with hard-link safety, crash recovery, and intact song IDs.</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- TAB 3: ARTWORK DESK -->
-            <div class="w-panel" id="w-panel-artwork" role="tabpanel" aria-labelledby="w-tab-artwork" data-w-panel="artwork" hidden>
-              <div class="w-panel-intro">
-                <h3>Artwork Desk &amp; multi-disc box sets</h3>
-                <p>
-                  Filter your entire collection by Missing, Failed, Needs review, Has artwork, or No art. Verify actual cover-file coverage on disk and fix up to 100 albums in a single cancelable batch.
-                </p>
-              </div>
-              <div class="w-two-col">
-                <div class="w-detail-box">
-                  <h4>Side-by-side candidate review</h4>
-                  <p>Compare embedded images, folder scans, Cover Art Archive releases, Discogs, and fanart.tv matches with full resolution, source, and release details before picking Use this cover. Drop in JPEG, PNG, or WebP files anytime.</p>
-                </div>
-                <div class="w-detail-box">
-                  <h4>Box sets &amp; per-disc covers</h4>
-                  <p>Assign dedicated artwork to every disc inside a multi-disc box set, then display either the box's main cover or an automatic collage built from its individual disc covers.</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- TAB 4: BACKUPS & TRANSFER -->
-            <div class="w-panel" id="w-panel-backups" role="tabpanel" aria-labelledby="w-tab-backups" data-w-panel="backups" hidden>
-              <div class="w-panel-intro">
-                <h3>Daily snapshots, encrypted offsite copies &amp; portable Mac transfer</h3>
-                <p>
-                  Your database, chosen artwork, playlists, listening history, and Album Journeys are backed up automatically every day with zero cloud subscription.
-                </p>
-              </div>
-              <div class="w-two-col">
-                <div class="w-detail-box">
-                  <h4>Compare before restore</h4>
-                  <p>Daily local rotation keeps 7 copies with shared artwork storage. Compare dates and song counts against your live library before restoring. Every restore automatically creates a "Before restore" safety copy and recovers cleanly if interrupted.</p>
-                </div>
-                <div class="w-detail-box">
-                  <h4>Encrypted offsite rotation</h4>
-                  <p>Point Backups elsewhere at an external drive, NAS, iCloud Drive, or Dropbox folder. Elysonic encrypts and verifies every snapshot, keeps up to 30 copies, and unlocks on a new Mac with your saved recovery code.</p>
-                </div>
-                <div class="w-detail-box">
-                  <h4>Portable <code>.elysonic</code> archives</h4>
-                  <p>Move your entire curated library to another Mac in one archive. Remap previous music folder roots to their new paths on import. Provider credentials stay safely in macOS Keychain.</p>
-                </div>
-                <div class="w-detail-box">
-                  <h4>Honest storage boundaries</h4>
-                  <p>Library backups protect your Elysonic catalog, artwork, and stories cleanly and fast. Keep your original audio files backed up with Time Machine or your own drive strategy.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ACT VI: LOCAL-FIRST, OPTIONAL AI & MCP -->
-    <section id="privacy" class="section privacy-section" aria-labelledby="privacy-title">
-      <div class="shell">
-        <div class="section-head">
-          <p class="kicker">Act VI · Architecture, AI &amp; Openness</p>
-          <h2 id="privacy-title">100% offline at its core.<br><span class="serif-accent">Open when you choose.</span></h2>
-          <p class="section-lead">
-            Playing, browsing, EQ, backups, and library repair need zero internet and zero AI. When you want online metadata, an in-app assistant, or external MCP tools, you stay in complete control of every byte and key.
-          </p>
-        </div>
-
-        <div class="privacy-grid">
-          <article class="privacy-card">
-            <span class="mono-tag">Bring Your Own Model</span>
-            <h3>In-app assistant, local or cloud</h3>
-            <p>
-              Chat with your collection, queue music, build playlists, classify missing genres and moods, or write Album Journeys. Connect local models through <strong>Ollama</strong> or <strong>LM Studio</strong>, or add your own API keys for <strong>Anthropic, OpenAI, Google, xAI, or Mistral</strong>.
-            </p>
-            <ul class="compact-list">
-              <li>Assign different models to chat, journeys, playlists, and genre tagging</li>
-              <li>Ordered provider fallback and background pre-build limits</li>
-              <li>Read and playback run immediately; every library or file edit asks Yes/No first</li>
-            </ul>
-          </article>
-
-          <article class="privacy-card">
-            <span class="mono-tag">Local MCP Server</span>
-            <h3>Connect Claude Desktop and other apps</h3>
-            <p>
-              Enable Elysonic's bundled local MCP server in Settings › Other apps and paste one config snippet into your client. Control exactly what external tools can touch with granular consent tiers and a live recent-activity log.
-            </p>
-            <div class="tier-pills" aria-label="MCP permission tiers">
-              <span>Base: Search, Now Playing &amp; Problems</span>
-              <span>+ Listening History</span>
-              <span>+ Playback &amp; Queue</span>
-              <span>+ Playlists</span>
-              <span>+ Tag Suggestions (Review)</span>
-              <span>+ Cover Art</span>
-            </div>
-          </article>
-
-          <article class="privacy-card">
-            <span class="mono-tag">Explicit Consent</span>
-            <h3>Transparent online services &amp; Keychain vault</h3>
-            <p>
-              Every integration in Settings › Online services explains exactly what leaves your Mac before you turn it on. All keys live in a unified macOS Keychain vault.
-            </p>
-            <ul class="compact-list">
-              <li><strong>No key needed:</strong> MusicBrainz, Cover Art Archive, Wikipedia/Wikidata, LRCLIB, Radio Browser</li>
-              <li><strong>Optional BYOK:</strong> Discogs, fanart.tv, AcoustID (sends local fingerprint + duration only), Callasso concerts, Spotify read-only import</li>
-              <li><strong>Direct artist support:</strong> Links to artist stores, Bandcamp, Qobuz, iTunes Store, and Amazon</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- COMPLETE FEATURE INDEX -->
+    <!-- COMPLETE TECHNICAL SPECS & FEATURE INVENTORY -->
     <section id="specs" class="section specs-section" aria-labelledby="specs-title">
       <div class="shell">
         <div class="section-head">
-          <p class="kicker">Complete Feature Inventory</p>
-          <h2 id="specs-title">Everything inside Elysonic.</h2>
+          <p class="kicker">Under the Hood · Complete Feature Inventory</p>
+          <h2 id="specs-title">For the audiophiles &amp; spec readers.</h2>
           <p class="section-lead">
-            407 native desktop operations organized across 11 areas. Filter below to inspect the exact formats, controls, and workflows built into the Mac app.
+            Built as a fast native app in Rust and SQLite. Everything included out of the box is listed first, followed by what unlocks when you connect your own services and APIs.
+            <a class="specs-releases-link" href="https://github.com/cjboco/elysonic-releases/releases" target="_blank" rel="noopener">View all releases on GitHub →</a>
           </p>
         </div>
 
-        <div class="spec-filters" role="group" aria-label="Filter feature index" data-spec-filters>
-          <button type="button" class="chip is-active" data-filter="all" aria-pressed="true">All 11 Areas</button>
-          <button type="button" class="chip" data-filter="playback" aria-pressed="false">Library &amp; Playback</button>
-          <button type="button" class="chip" data-filter="audio" aria-pressed="false">Sound &amp; Lyrics</button>
-          <button type="button" class="chip" data-filter="explore" aria-pressed="false">Discovery &amp; Journeys</button>
-          <button type="button" class="chip" data-filter="manage" aria-pressed="false">Repair, Backups &amp; Mac</button>
-        </div>
-
-        <div class="specs-grid" data-specs-grid>
-          <article class="spec-card" data-category="playback">
-            <h3>Library &amp; Navigation</h3>
+        <p class="specs-group-label">Included out of the box</p>
+        <div class="specs-grid">
+          <article class="spec-card" data-category="playback" data-tier="core">
+            <div class="spec-card-head">
+              <h3>Library &amp; Formats</h3>
+              <span class="inline-badge badge-core">Out of the box</span>
+            </div>
             <ul>
-              <li>Recursive folder scanning with active folder labels &amp; live filesystem watching</li>
-              <li>Read-only Apple Music folder sharing with APFS copy-on-write album adoption</li>
               <li>FLAC, ALAC, MP3, AAC, M4A, MP4, Ogg/Vorbis, Opus, WAV, AIFF &amp; CUE sheets</li>
+              <li>Read-only Apple Music folder sharing with copy-on-write album adoption (owned files only)</li>
+              <li>Recursive folder scanning, live filesystem watching &amp; SQLite FTS5 search</li>
               <li>Cover grids, sortable lists, alphabet jump bar &amp; remembered per-view sort</li>
               <li><code>⌘K</code> Find anything &amp; <code>⌘F</code> library search</li>
               <li>Album extras: local booklets, liner notes &amp; scans</li>
@@ -907,8 +717,11 @@
             </ul>
           </article>
 
-          <article class="spec-card" data-category="playback">
-            <h3>Playback, Listening Room &amp; Radio</h3>
+          <article class="spec-card" data-category="playback" data-tier="core">
+            <div class="spec-card-head">
+              <h3>Playback, Listening Room &amp; Radio</h3>
+              <span class="inline-badge badge-core">Out of the box</span>
+            </div>
             <ul>
               <li>Full-stage Listening Room with Cover, Visualizer &amp; Up Next modes</li>
               <li>Gapless playback, optional crossfade &amp; silence skipping</li>
@@ -916,111 +729,129 @@
               <li>Smart shuffle with artist spacing &amp; whole-album shuffle</li>
               <li>Up Next drag-reorder, save as playlist &amp; Queue Undo</li>
               <li>Session restore, Earlier Queues (last 10 queues), sleep timer &amp; explicit skip</li>
-              <li>Keep-on-Top Mini Player, macOS media keys &amp; Radio Browser directory</li>
+              <li>Keep-on-Top Mini Player, system media keys &amp; free Radio Browser internet radio</li>
             </ul>
           </article>
 
-          <article class="spec-card" data-category="audio">
-            <h3>Sound, EQ &amp; Visualizer</h3>
+          <article class="spec-card" data-category="audio" data-tier="core">
+            <div class="spec-card-head">
+              <h3>Audio Engine, EQ &amp; Visualizers</h3>
+              <span class="inline-badge badge-core">Out of the box</span>
+            </div>
             <ul>
-              <li>Simple 3-band EQ &amp; 10-band Advanced EQ with response curve</li>
-              <li>EQ inheritance: Song → Album → Output → All music</li>
+              <li>Simple 3-band EQ &amp; 10-band Advanced EQ with live before/after response curve</li>
+              <li>EQ inheritance: Song → Album → Output → All music + live Sound Path inspector</li>
               <li>Named Listening Setups recalled via Sound or <code>⌘K</code></li>
               <li>EBU R128 loudness (-23 to -14 LUFS), ReplayGain &amp; true-peak limiter</li>
-              <li>AutoEq / Equalizer APO <code>ParametricEQ.txt</code> per output</li>
+              <li>AutoEq / Equalizer APO <code>ParametricEQ.txt</code> headphone correction per output</li>
               <li>Headphone crossfeed blend (Off / Light / Medium / Strong) &amp; L/R balance</li>
-              <li>8 visualizer styles (incl. Analog VU, Solaris &amp; Aurora silk), 4 waveform shapes (Filled, Bars, Line, Dots), 6 palettes, custom ramps &amp; macOS EQ Screen Saver</li>
+              <li>8 visualizer styles (Analog VU, Solaris, Aurora silk, CRT, Pulsar), 4 waveform shapes, 6 palettes, custom ramps &amp; live EQ Screen Saver</li>
             </ul>
           </article>
 
-          <article class="spec-card" data-category="audio">
-            <h3>Lyrics, Karaoke &amp; Lyric Editor</h3>
+          <article class="spec-card" data-category="audio" data-tier="core unlock">
+            <div class="spec-card-head">
+              <h3>Lyrics, Karaoke &amp; Lyric Editor</h3>
+              <span class="inline-badge badge-core">Core + Opt-In</span>
+            </div>
             <ul>
               <li>Karaoke Mode with real-time vocal reduction, 3-2-1 lead-in countdowns &amp; full-screen stage</li>
-              <li>Embedded lyrics (ID3 SYLT), sidecars, local edits &amp; LRCLIB lookup</li>
-              <li>Word and syllable highlighting via Enhanced LRC (<code>elyric</code>) with lyrics badges</li>
-              <li>Local vocal/music separation &amp; on-device Whisper alignment</li>
-              <li>Draggable word/syllable timeline with vocal onset snapping &amp; edge scrolling</li>
-              <li>Audible scrubbing, word looping &amp; pitch-locked 3/4 and 1/2 speed</li>
-              <li>Independent Voice / Music mute toggles, Manual text edit &amp; LRCLIB sharing</li>
+              <li>Embedded lyrics (ID3 SYLT), sidecars, and manual word/syllable timeline editor (<code>elyric</code>)</li>
+              <li>Audible scrubbing, word looping, onset snapping &amp; pitch-locked 3/4 and 1/2 speed</li>
+              <li><em>Optional (flip on):</em> LRCLIB online synced lyrics lookup &amp; sharing</li>
+              <li><em>Optional (local models):</em> Vocal/music lane separation &amp; on-device Whisper alignment</li>
             </ul>
           </article>
 
-          <article class="spec-card" data-category="explore">
-            <h3>Playlists, History &amp; Discovery</h3>
+          <article class="spec-card" data-category="explore" data-tier="core">
+            <div class="spec-card-head">
+              <h3>Local Playlists, History &amp; Stations</h3>
+              <span class="inline-badge badge-core">Out of the box</span>
+            </div>
             <ul>
               <li>Manual playlists, Favorites &amp; song/album star ratings</li>
               <li>Smart playlists across 13 rule fields with live preview &amp; artist spacing</li>
               <li>Library Stations with Discovery Dial, up/down voting &amp; Played less</li>
               <li>Rediscover shelves &amp; Recently Added</li>
               <li>Genres &amp; Moods browser with include/exclude shuffle filters</li>
-              <li>Direct Apple Music playlist &amp; play-count import via macOS (plus XML fallback)</li>
-              <li>M3U/M3U8, PLS, XSPF, CSV, XML &amp; read-only Spotify playlist import</li>
+              <li>Direct Apple Music playlist &amp; play-count import (plus XML fallback)</li>
+              <li>M3U/M3U8, PLS, XSPF, CSV &amp; Music XML import and export</li>
             </ul>
           </article>
 
-          <article class="spec-card" data-category="explore">
-            <h3>Artists, Connections &amp; Journeys</h3>
+          <article class="spec-card" data-category="manage" data-tier="core">
+            <div class="spec-card-head">
+              <h3>Local Repair, Backups &amp; Accessibility</h3>
+              <span class="inline-badge badge-core">Out of the box</span>
+            </div>
             <ul>
-              <li>Album Journeys: narrated album-by-album discography timelines</li>
+              <li>Flagged repair desk for duplicates, artist spelling drift, missing files &amp; unreadable tracks</li>
+              <li>Non-destructive tag edits, field locking, classical works &amp; explicit Write Tags plan</li>
+              <li>Drag-and-drop import, CUE splitting, Smart Replace &amp; Join Albums consolidation</li>
+              <li>Local embedded/folder Artwork Desk &amp; box set per-disc cover collages</li>
+              <li>Daily 7-copy local backups, Compare-before-restore &amp; portable <code>.elysonic</code> archives</li>
+              <li>Encrypted offsite backups (up to 30 verified copies) with recovery code</li>
+              <li>WCAG 2.2 AA contrast &amp; keyboard nav, Bigger Text scaling, light/dark themes &amp; Reduce Motion</li>
+            </ul>
+          </article>
+        </div>
+
+        <p class="specs-group-label specs-group-label-gold">Unlocked with your own services &amp; APIs</p>
+        <div class="specs-grid">
+          <article class="spec-card spec-card-unlock">
+            <div class="spec-card-head">
+              <h3>Journeys, Music Tree &amp; Artist Universe</h3>
+              <span class="inline-badge badge-unlock">Unlockable · BYO API</span>
+            </div>
+            <ul>
+              <li>Album Journeys: background-built narrated timelines for complete discographies (MusicBrainz + Wikipedia + your AI)</li>
               <li>Shareable <code>.elyjourney</code> files &amp; multi-model Compare Tellings</li>
-              <li>Redesigned Music Tree interactive member/band graph &amp; family-tree playlists</li>
+              <li>Music Tree interactive member/band graph &amp; family-tree playlists</li>
               <li>Five Degrees Explore mode &amp; Challenge path-finding game</li>
               <li>Discography gap comparison, Wishlist &amp; "Almost there" shelf</li>
-              <li>Wikipedia/Wikidata artist bios, band members &amp; photo picker</li>
-              <li>Optional local concert listings &amp; Bandcamp/Qobuz/artist store links</li>
+              <li>Wikipedia/Wikidata artist bios, band members &amp; Wikimedia photo picker</li>
+              <li>Optional nearby concert listings via Callasso (from the makers of Elysonic) &amp; Bandcamp/Qobuz store links</li>
             </ul>
           </article>
 
-          <article class="spec-card" data-category="manage">
-            <h3>Artwork, Editing &amp; Repair</h3>
+          <article class="spec-card spec-card-unlock" data-category="manage" data-tier="unlock">
+            <div class="spec-card-head">
+              <h3>Online Lookup, AI &amp; MCP</h3>
+              <span class="inline-badge badge-unlock">Unlockable · BYO API</span>
+            </div>
             <ul>
-              <li>Flagged repair desk: 6 problem categories with Changes log &amp; Undo</li>
-              <li>Artwork Desk: batch search up to 100 albums, Needs review &amp; disk cover verification</li>
-              <li>Box set per-disc cover art &amp; automatic disc collages</li>
-              <li>Non-destructive tag edits, field locking &amp; explicit Write Tags to Files plan</li>
-              <li>Classical works &amp; movements, credits, MusicBrainz/Discogs/AcoustID lookup</li>
-              <li>Drag-and-drop import, CUE splitting &amp; Smart Replace (keeps counts &amp; playlists)</li>
-              <li>Logical multi-disc grouping &amp; crash-safe physical Join Albums consolidation</li>
-            </ul>
-          </article>
-
-          <article class="spec-card" data-category="manage">
-            <h3>Backups, Assistants &amp; Mac Craft</h3>
-            <ul>
-              <li>Rust + SQLite desktop engine with signed Sparkle auto-updates</li>
-              <li>Daily 7-copy local backups, Compare-before-restore &amp; safety snapshots</li>
-              <li>Portable <code>.elysonic</code> Mac-to-Mac archives with root remapping</li>
-              <li>Encrypted offsite backups (up to 30 verified copies) with recovery code</li>
-              <li>Optional AI via Ollama, LM Studio, Anthropic, OpenAI, Google, xAI &amp; Mistral</li>
-              <li>Local MCP server with tiered permissions &amp; unified macOS Keychain vault</li>
-              <li>WCAG 2.2 AA contrast &amp; keyboard navigation, Bigger Text scaling, themes &amp; Reduce Motion</li>
+              <li>MusicBrainz &amp; Discogs release edition lookup, track audits &amp; Check Albums reports</li>
+              <li>AcoustID acoustic fingerprinting (local fingerprint only; audio never uploads)</li>
+              <li>Batch online cover search (up to 100 albums) via Cover Art Archive, Discogs &amp; fanart.tv</li>
+              <li>In-app AI assistant via Ollama, LM Studio, Anthropic, OpenAI, Google, xAI &amp; Mistral</li>
+              <li>AI genre/mood tagging &amp; MusicBrainz-verified playlist suggestions</li>
+              <li>Local MCP server with tiered permissions &amp; unified Keychain vault</li>
+              <li>Read-only Spotify playlist import (using your own free Spotify developer Client ID)</li>
             </ul>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- RELEASE / PREVIEW BANNER -->
+    <!-- FINAL DOWNLOAD & ROADMAP BANNER -->
     <section id="preview" class="section preview-section" aria-labelledby="preview-title">
       <div class="shell">
         <div class="preview-card">
           <div class="preview-identity">
             <img src="assets/app-icon.png" alt="Elysonic app icon" width="88" height="88" loading="lazy">
             <div>
-              <span class="mono-tag">macOS 14+ · Apple Silicon · Signed &amp; Notarized</span>
-              <h2 id="preview-title">Available now for Apple Silicon Macs.</h2>
+              <span class="card-kicker card-kicker-mint">Free Download · No Subscription</span>
+              <h2 id="preview-title">Free your music. Download Elysonic.</h2>
               <p>
-                Download the signed and notarized Developer ID installer for macOS 14 or later.
-                Elysonic stays up to date automatically via Sparkle as new builds ship, with a Mac App Store build also in the pipeline.
+                Start with a simple, offline music player in seconds. Unlock the power features with your own APIs later if you ever want them.
               </p>
               <div class="preview-actions">
-                <a class="btn btn-primary" href="https://github.com/cjboco/elysonic-releases/releases/latest" target="_blank" rel="noopener">
-                  Download Latest Release
+                <a class="btn btn-primary" href="https://github.com/cjboco/elysonic-releases/releases/latest" data-download-latest>
+                  Free Download
                   <span aria-hidden="true">↓</span>
                 </a>
                 <a class="btn btn-secondary" href="https://github.com/cjboco/elysonic-releases/releases" target="_blank" rel="noopener">
-                  Release notes
+                  View all releases on GitHub
                 </a>
               </div>
             </div>
@@ -1029,22 +860,22 @@
             <div class="roadmap-item is-current">
               <span class="roadmap-dot" aria-hidden="true"></span>
               <div>
-                <strong>Now: macOS 14+ (Apple Silicon)</strong>
-                <span>Notarized direct releases with Sparkle auto-updates and WCAG 2.2 AA polish</span>
+                <strong>Now: macOS 14+ (Apple M1 or newer)</strong>
+                <span>Free download with built-in update checks</span>
               </div>
             </div>
             <div class="roadmap-item">
               <span class="roadmap-dot" aria-hidden="true"></span>
               <div>
-                <strong>Next: Personal Network &amp; Remote</strong>
-                <span>Stream your home library remotely and control playback</span>
+                <strong>Next: iPhone &amp; CarPlay</strong>
+                <span>Take your library, playlists, and Album Journeys on the road</span>
               </div>
             </div>
             <div class="roadmap-item">
               <span class="roadmap-dot" aria-hidden="true"></span>
               <div>
-                <strong>Planned: iPhone, CarPlay, Windows &amp; Linux</strong>
-                <span>Bringing the same local-first library everywhere you listen</span>
+                <strong>Planned: Personal Network, Windows &amp; Linux</strong>
+                <span>Bringing the same owned-music library to every platform</span>
               </div>
             </div>
           </div>
@@ -1059,7 +890,7 @@
         <img src="assets/mark.png" alt="" width="30" height="30" loading="lazy">
         <span>elysonic</span>
       </a>
-      <p class="footer-note">Built for people who still own their albums.</p>
+      <p class="footer-note">Free music player for people who still own their albums.</p>
       <a class="back-top" href="#top">Back to top ↑</a>
     </div>
   </footer>

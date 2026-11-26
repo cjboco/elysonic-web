@@ -36,9 +36,9 @@
       </nav>
       <div class="masthead-actions">
         <a class="mobile-power-link" href="#ready-for-power">Power ↓</a>
-        <a class="nav-pill" href="https://github.com/cjboco/elysonic-releases/releases/latest" data-download-latest>
-          <span class="pulse-dot" aria-hidden="true"></span>
+        <a class="btn btn-primary btn-nav" href="https://github.com/cjboco/elysonic-releases/releases/latest" data-download-latest>
           Free Download
+          <span aria-hidden="true">↓</span>
         </a>
       </div>
     </div>
@@ -258,10 +258,10 @@
           <!-- INTERACTIVE DISCOVERY DIAL -->
           <article class="station-card">
             <div class="station-head">
-              <span class="card-kicker">Personal Stations</span>
-              <h3>Your own radio, made from your music</h3>
+              <span class="card-kicker">Library Stations</span>
+              <h3>Start a station from any song or artist</h3>
               <p>
-                Pick any song, artist, or genre and Elysonic keeps playing music from your collection that fits. Slide the dial toward familiar favorites or forgotten deep cuts, and use thumbs up or down to guide what plays next.
+                Click ⋯ on any song or artist in your library and choose Start station to turn your own collection into a continuous mix. Slide the Familiar-to-Discover dial right inside Up Next, and use thumbs up or down to steer what plays next.
               </p>
             </div>
 
@@ -348,7 +348,7 @@
               <span class="serif-accent">you need a free music player.</span>
             </h2>
             <p class="cost-manifesto">
-              It's 2026, for god's sake. Playing music you already paid for on a computer you already own ain't rocket science.
+              It's 2026. Playing music you already paid for on a computer you already own isn't rocket science.
             </p>
             <p class="cost-explain">
               No monthly subscription. No account wall. No "Pro" upgrade locking away the equalizer, karaoke mode, or backups.
@@ -472,7 +472,7 @@
               </li>
               <li>
                 <strong>Spotify &amp; Callasso</strong>
-                <span>Read-only Spotify playlist import (using your own free Spotify developer Client ID) and optional nearby concerts via Callasso, an app from the makers of Elysonic.</span>
+                <span>Read-only Spotify playlist import (using your own free Spotify developer Client ID). Nearby concerts via Callasso, an app from the makers of Elysonic, coming soon.</span>
               </li>
             </ul>
           </article>
@@ -490,8 +490,8 @@
                 <span>Run local models right on your machine with zero per-token bills and full privacy.</span>
               </li>
               <li>
-                <strong>Anthropic, OpenAI, Google, xAI, Mistral</strong>
-                <span>Paste your own API key, assign different models by job, set fallback order, and cap daily background use.</span>
+                <strong>Claude, ChatGPT, Gemini, Grok &amp; Mistral</strong>
+                <span>Paste your own API key for Anthropic, OpenAI, Google, xAI, or Mistral, assign different models by job, set fallback order, and cap daily background use.</span>
               </li>
               <li>
                 <strong>Local Vocal &amp; Whisper Models + MCP</strong>
@@ -513,11 +513,15 @@
       <div class="shell">
         <div class="journey-grid">
           <div class="journey-editorial">
-            <div class="unlock-req-row">
-              <span class="inline-badge badge-unlock">Requires: Complete Artist Discography + MusicBrainz + Wikipedia + Your Own AI</span>
-            </div>
             <p class="kicker kicker-gold">Unlocked · Album Journeys</p>
             <h2 id="journey-title">Hear the story behind <span class="serif-accent">every era</span> you own.</h2>
+            <div class="unlock-req-row" aria-label="Requirements for Album Journeys">
+              <span class="req-label">Requires</span>
+              <span class="inline-badge badge-unlock">Full Discography</span>
+              <span class="inline-badge badge-unlock">MusicBrainz</span>
+              <span class="inline-badge badge-unlock">Wikipedia</span>
+              <span class="inline-badge badge-unlock">Your Own AI</span>
+            </div>
             <p class="section-lead">
               Enable online lookup and connect your own local or cloud AI, and Album Journeys turns a complete studio discography into an interactive, narrated documentary played straight from your own files.
             </p>
@@ -573,8 +577,8 @@
           </article>
 
           <article class="universe-card universe-degrees">
-            <span class="inline-badge badge-unlock">Requires: MusicBrainz + Wikipedia (+ Callasso for shows)</span>
-            <h3>Five Degrees, Discography &amp; Concerts</h3>
+            <span class="inline-badge badge-unlock">Requires: MusicBrainz + Wikipedia</span>
+            <h3>Five Degrees, Discography &amp; Artist Details</h3>
             <p>
               Trace evidence-backed paths between any two artists in Explore mode, save your routes, and build playlists from the trail. Or switch to Challenge mode and race to connect two artists with hints when you get stuck.
             </p>
@@ -601,7 +605,7 @@
               </div>
               <div>
                 <strong>About &amp; Concerts</strong>
-                <span>Wikipedia/Wikidata bios, photo pickers, and optional nearby show listings by city and radius via Callasso (from the makers of Elysonic).</span>
+                <span>Wikipedia/Wikidata bios, photo pickers, and nearby show listings via Callasso (from the makers of Elysonic, coming soon).</span>
               </div>
             </div>
           </article>
@@ -636,10 +640,10 @@
           </article>
 
           <article class="privacy-card">
-            <span class="inline-badge badge-unlock">Ollama · LM Studio · Cloud AI API Keys</span>
+            <span class="inline-badge badge-unlock">Local AI &amp; Frontier Models</span>
             <h3>In-app AI assistant, genre tagging &amp; playlist picks</h3>
             <p>
-              Connect a local model or paste your own key for Anthropic, OpenAI, Google, xAI, or Mistral in Settings › Assistants:
+              Connect a local model (Ollama or LM Studio) or paste your own API key for Claude, ChatGPT, Gemini, Grok, or Mistral in Settings › Assistants:
             </p>
             <ul class="compact-list">
               <li>Chat with your collection, queue songs, build playlists, and ask for library cleanups</li>
@@ -810,7 +814,7 @@
               <li>Five Degrees Explore mode &amp; Challenge path-finding game</li>
               <li>Discography gap comparison, Wishlist &amp; "Almost there" shelf</li>
               <li>Wikipedia/Wikidata artist bios, band members &amp; Wikimedia photo picker</li>
-              <li>Optional nearby concert listings via Callasso (from the makers of Elysonic) &amp; Bandcamp/Qobuz store links</li>
+              <li>Nearby concert listings via Callasso (from the makers of Elysonic, coming soon) &amp; Bandcamp/Qobuz store links</li>
             </ul>
           </article>
 
@@ -823,7 +827,7 @@
               <li>MusicBrainz &amp; Discogs release edition lookup, track audits &amp; Check Albums reports</li>
               <li>AcoustID acoustic fingerprinting (local fingerprint only; audio never uploads)</li>
               <li>Batch online cover search (up to 100 albums) via Cover Art Archive, Discogs &amp; fanart.tv</li>
-              <li>In-app AI assistant via Ollama, LM Studio, Anthropic, OpenAI, Google, xAI &amp; Mistral</li>
+              <li>In-app AI assistant via Ollama, LM Studio, Claude (Anthropic), ChatGPT (OpenAI), Gemini (Google), Grok (xAI) &amp; Mistral</li>
               <li>AI genre/mood tagging &amp; MusicBrainz-verified playlist suggestions</li>
               <li>Local MCP server with tiered permissions &amp; unified Keychain vault</li>
               <li>Read-only Spotify playlist import (using your own free Spotify developer Client ID)</li>

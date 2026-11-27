@@ -24,8 +24,8 @@
   <link rel="apple-touch-icon" href="assets/app-icon.png">
   <link rel="preload" href="assets/fonts/plus-jakarta-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/instrument-serif-400-italic.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="style.css?v=2">
-  <script src="site.js" defer></script>
+  <link rel="stylesheet" href="style.css?v=3">
+  <script src="site.js?v=2" defer></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -45,7 +45,7 @@
       </nav>
       <div class="masthead-actions">
         <a class="mobile-power-link" href="#ready-for-power">Power ↓</a>
-        <a class="btn btn-primary btn-nav" href="https://github.com/cjboco/elysonic-releases/releases/latest/download/Elysonic-macOS.pkg">
+        <a class="btn btn-primary btn-nav" href="https://github.com/cjboco/elysonic-releases/releases/latest/download/Elysonic-macOS.pkg" data-beta-download>
           <span>Download<span class="cta-for-mac"> for Mac</span></span>
           <span class="btn-beta">Beta</span>
         </a>
@@ -77,7 +77,7 @@
             Whether you have fifty CDs or five thousand albums, open it, pick your folder, and press play.
           </p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="https://github.com/cjboco/elysonic-releases/releases/latest/download/Elysonic-macOS.pkg">
+            <a class="btn btn-primary" href="https://github.com/cjboco/elysonic-releases/releases/latest/download/Elysonic-macOS.pkg" data-beta-download>
               Download for Mac
               <span class="btn-beta">Beta</span>
             </a>
@@ -485,7 +485,7 @@
               Download it on your Mac, point it at your music, and enjoy your collection.
             </p>
             <div class="cost-actions">
-              <a class="btn btn-primary" href="https://github.com/cjboco/elysonic-releases/releases/latest/download/Elysonic-macOS.pkg">
+              <a class="btn btn-primary" href="https://github.com/cjboco/elysonic-releases/releases/latest/download/Elysonic-macOS.pkg" data-beta-download>
                 Download for Mac
                 <span class="btn-beta">Beta</span>
               </a>
@@ -963,7 +963,7 @@
                 Start with a simple, offline Mac music player in seconds. Unlock advanced audio and online power features later if you ever want them.
               </p>
               <div class="preview-actions">
-                <a class="btn btn-primary" href="https://github.com/cjboco/elysonic-releases/releases/latest/download/Elysonic-macOS.pkg">
+                <a class="btn btn-primary" href="https://github.com/cjboco/elysonic-releases/releases/latest/download/Elysonic-macOS.pkg" data-beta-download>
                   Download for Mac
                   <span class="btn-beta">Beta</span>
                 </a>
@@ -1016,6 +1016,35 @@
     </div>
     <div class="viewer-body">
       <img id="image-large" alt="" hidden>
+    </div>
+  </dialog>
+
+  <!-- BETA DOWNLOAD CONFIRMATION MODAL -->
+  <dialog id="beta-download-dialog" aria-labelledby="beta-dialog-title" aria-describedby="beta-dialog-desc">
+    <div class="beta-dialog-inner">
+      <div class="beta-dialog-head">
+        <span class="beta-dialog-pill">Beta Software</span>
+        <form method="dialog">
+          <button type="submit" class="beta-dialog-close" aria-label="Close">×</button>
+        </form>
+      </div>
+      <h2 id="beta-dialog-title">You're about to download the Elysonic Beta</h2>
+      <p id="beta-dialog-desc">
+        Elysonic is still in active beta, so you may run into rough edges or the occasional bug as things are polished toward 1.0.
+      </p>
+      <ul class="beta-dialog-list">
+        <li><strong>Apple Silicon Macs only</strong> — requires macOS 14 or newer (M1 or later).</li>
+        <li><strong>Signed &amp; notarized</strong> — includes built-in update checks so new beta fixes arrive automatically.</li>
+        <li><strong>Your music stays untouched</strong> — Elysonic plays your library read-only unless you explicitly save tag edits.</li>
+      </ul>
+      <div class="beta-dialog-actions">
+        <form method="dialog">
+          <button type="submit" class="btn btn-secondary">Cancel</button>
+        </form>
+        <a id="beta-dialog-confirm" class="btn btn-primary" href="https://github.com/cjboco/elysonic-releases/releases/latest/download/Elysonic-macOS.pkg" autofocus>
+          Download Beta (.pkg)
+        </a>
+      </div>
     </div>
   </dialog>
 </body>

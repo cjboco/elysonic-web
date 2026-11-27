@@ -1193,4 +1193,33 @@
       opener?.focus({ preventScroll: true });
     });
   }
+
+  /* ==================== 4. BETA DOWNLOAD CONFIRMATION MODAL ==================== */
+  const betaDialog = document.querySelector('#beta-download-dialog');
+  if (betaDialog && typeof betaDialog.showModal === 'function') {
+    const confirmLink = betaDialog.querySelector('#beta-dialog-confirm');
+    let opener = null;
+
+    document.querySelectorAll('a[data-beta-download]').forEach((link) => {
+      link.addEventListener('click', (event) => {
+        if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        opener = link;
+        if (confirmLink) confirmLink.href = link.href;
+        betaDialog.showModal();
+      });
+    });
+
+    confirmLink?.addEventListener('click', () => {
+      setTimeout(() => betaDialog.close(), 0);
+    });
+
+    betaDialog.addEventListener('click', (event) => {
+      if (event.target === betaDialog) betaDialog.close();
+    });
+
+    betaDialog.addEventListener('close', () => {
+      opener?.focus({ preventScroll: true });
+    });
+  }
 })();

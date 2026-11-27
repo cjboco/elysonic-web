@@ -1,151 +1,65 @@
 (() => {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ==================== 0. DIRECT LATEST INSTALLER DOWNLOAD ==================== */
-  const downloadLinks = [...document.querySelectorAll('a[data-download-latest]')];
-  if (downloadLinks.length) {
-    const LATEST_API = 'https://api.github.com/repos/cjboco/elysonic-releases/releases/latest';
-    const FALLBACK_URL = 'https://github.com/cjboco/elysonic-releases/releases/latest';
-    let resolvedPkgUrl = null;
-
-    const latestPkgPromise = fetch(LATEST_API, { headers: { Accept: 'application/vnd.github+json' } })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((release) => {
-        if (!release || !Array.isArray(release.assets)) return null;
-        const pkg = release.assets.find((a) => typeof a.name === 'string' && a.name.toLowerCase().endsWith('.pkg'));
-        const zip = release.assets.find((a) => typeof a.name === 'string' && a.name.toLowerCase().endsWith('.zip'));
-        const asset = pkg || zip;
-        if (!asset || !asset.browser_download_url) return null;
-        resolvedPkgUrl = asset.browser_download_url;
-        for (const link of downloadLinks) {
-          link.href = resolvedPkgUrl;
-          link.setAttribute('download', asset.name);
-        }
-        return resolvedPkgUrl;
-      })
-      .catch(() => null);
-
-    downloadLinks.forEach((link) => {
-      link.addEventListener('click', (event) => {
-        if (resolvedPkgUrl || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-        event.preventDefault();
-        const timeout = new Promise((resolve) => setTimeout(() => resolve(null), 2500));
-        Promise.race([latestPkgPromise, timeout]).then((url) => {
-          window.location.assign(url || FALLBACK_URL);
-        });
-      });
-    });
-  }
-
-  /* ==================== 1. GENERIC ACCESSIBLE TABS ==================== */
-  function initTabGroup(tabSelector, panelSelector, dataAttr) {
-    const tabs = [...document.querySelectorAll(tabSelector)];
-    const panels = [...document.querySelectorAll(panelSelector)];
-    if (!tabs.length || !panels.length) return;
-
-    function activate(tab) {
-      const target = tab.getAttribute(dataAttr);
-      for (const item of tabs) {
-        const active = item === tab;
-        item.classList.toggle('is-active', active);
-        item.setAttribute('aria-selected', String(active));
-      }
-      for (const panel of panels) {
-        const match = panel.getAttribute(dataAttr.replace('tab', 'panel')) === target;
-        panel.hidden = !match;
-        panel.classList.toggle('is-active', match);
-      }
-    }
-
-    tabs.forEach((tab, index) => {
-      tab.addEventListener('click', () => activate(tab));
-      tab.addEventListener('keydown', (event) => {
-        if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
-        event.preventDefault();
-        const nextIndex = (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
-        tabs[nextIndex].focus();
-        activate(tabs[nextIndex]);
-      });
-    });
-  }
-
-  initTabGroup('[data-stage-tab]', '[data-stage-panel]', 'data-stage-tab');
-  initTabGroup('[data-w-tab]', '[data-w-panel]', 'data-w-tab');
-
-  /* ==================== 2. EQ INHERITANCE EXPLAINER ==================== */
-  const cascadeNotes = {
-    song: 'Saved for this song: uses this song\'s sound first, even if you saved a flat setting for one bright track.',
-    album: 'Saved for this album: applies to every track on the record unless a single song has its own setting.',
-    output: 'Saved for this device: follows your speakers or headphones automatically whenever you switch.',
-    all: 'Your default: plays whenever no song, album, or speaker setting is saved.'
-  };
-  const cascadeNodes = [...document.querySelectorAll('[data-cascade]')];
-  const cascadeNoteEl = document.querySelector('#cascade-note');
-
-  cascadeNodes.forEach((node) => {
-    node.addEventListener('click', () => {
-      for (const item of cascadeNodes) item.classList.toggle('is-active', item === node);
-      if (cascadeNoteEl) cascadeNoteEl.textContent = cascadeNotes[node.dataset.cascade] || '';
-    });
-  });
-
-  /* ==================== 3. DISCOVERY DIAL DEMO ==================== */
+  /* ==================== 1. DISCOVERY DIAL DEMO (MATCHES APP 5-STEP SCALE) ==================== */
   const dialInput = document.querySelector('#discovery-dial');
   const dialLabel = document.querySelector('#dial-mode-label');
   const dialDesc = document.querySelector('#dial-mode-desc');
 
   if (dialInput && dialLabel && dialDesc) {
-    const updateDial = () => {
-      const val = Number(dialInput.value);
-      if (val < 34) {
-        dialLabel.textContent = 'Familiar Favorites';
-        dialDesc.textContent = 'Stays close to your starting song with highly rated tracks, hearted songs, and artists you already return to often.';
-      } else if (val < 68) {
-        dialLabel.textContent = 'Balanced Mix';
-        dialDesc.textContent = 'Blends favorite songs near your starting song with unplayed album cuts from related genres. Downvoted songs move to Played less.';
-      } else {
-        dialLabel.textContent = 'Deep Cuts & Rediscovery';
-        dialDesc.textContent = 'Reaches further across your collection for rarely played albums, B-sides, and forgotten tracks connected to your starting song.';
+    const DIAL_STEPS = [
+      {
+        label: 'Familiar',
+        desc: 'Stays closest to your starting song with favorites, highly rated songs, and artists you already return to most.'
+      },
+      {
+        label: 'Mostly familiar',
+        desc: 'Leans on favorites near your starting song, mixing in a few album cuts you have not heard recently.'
+      },
+      {
+        label: 'A mix',
+        desc: 'Blends favorite songs near your starting song with unplayed album cuts from related genres. Songs you vote down move to Played less.'
+      },
+      {
+        label: 'Mostly new',
+        desc: 'Pulls mostly lesser-played albums and deeper cuts connected to your starting song, anchored by an occasional favorite.'
+      },
+      {
+        label: 'New to you',
+        desc: 'Reaches across your collection for rarely played albums, B-sides, and forgotten songs connected to your starting song.'
       }
+    ];
+
+    const updateDial = () => {
+      const idx = Math.max(0, Math.min(DIAL_STEPS.length - 1, Number(dialInput.value) || 0));
+      const step = DIAL_STEPS[idx];
+      dialInput.setAttribute('aria-valuetext', step.label);
+      dialLabel.textContent = step.label;
+      dialDesc.textContent = step.desc;
     };
     dialInput.addEventListener('input', updateDial);
+    updateDial();
   }
 
-  /* ==================== 4. COMPLETE FEATURE INDEX FILTER ==================== */
-  const filterButtons = [...document.querySelectorAll('[data-spec-filters] [data-filter]')];
-  const specCards = [...document.querySelectorAll('[data-specs-grid] .spec-card')];
-
-  filterButtons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const selected = btn.dataset.filter;
-      for (const item of filterButtons) {
-        const active = item === btn;
-        item.classList.toggle('is-active', active);
-        item.setAttribute('aria-pressed', String(active));
-      }
-      for (const card of specCards) {
-        const tiers = (card.dataset.tier || '').split(/\s+/).filter(Boolean);
-        const matches = selected === 'all' || card.dataset.category === selected || tiers.includes(selected);
-        card.hidden = !matches;
-      }
-    });
-  });
-
-  /* ==================== 5. INTERACTIVE LIVE EQ VISUALIZER ==================== */
+  /* ==================== 2. INTERACTIVE LIVE EQ VISUALIZER ==================== */
   const canvas = document.querySelector('#eq-visualizer-canvas');
-  if (canvas && canvas.getContext) {
+  const canvasWrap = canvas?.closest('.viz-canvas-wrap');
+  if (canvas && canvasWrap && canvas.getContext) {
     const ctx = canvas.getContext('2d');
     const readout = document.querySelector('#viz-readout');
-    const bpmPill = document.querySelector('#viz-bpm-pill');
     const toggleBtn = document.querySelector('#viz-play-toggle');
+    const paletteLabel = document.querySelector('#viz-palette-label');
+    const styleButtons = [...document.querySelectorAll('[data-viz-styles] .chip')];
+    const paletteButtons = [...document.querySelectorAll('[data-viz-palettes] .chip')];
 
+    // Exact 5-stop color presets matching app/ui/app.css (--heat-0..4) and crates/elysonic-core/src/eq_display.rs
     const PALETTES = {
-      elysonic: { name: 'Elysonic', stops: ['#6237c9', '#c83b8c', '#ff6e4d', '#f6c36d'] },
-      ocean:    { name: 'Ocean',    stops: ['#0d3b66', '#167d9c', '#30c5d2', '#a8f9ff'] },
-      aurora:   { name: 'Aurora',   stops: ['#2a1f6b', '#1b8a7e', '#4ee69f', '#d3ff8c'] },
-      ember:    { name: 'Ember',    stops: ['#5e1418', '#b82a23', '#f26422', '#ffcf6b'] },
-      synthwave:{ name: 'Synthwave',stops: ['#3a1c71', '#9c27b0', '#ff2a85', '#36e2ff'] },
-      phosphor: { name: 'Phosphor', stops: ['#0c3818', '#1b7a34', '#41d968', '#b8ffca'] }
+      elysonic:  { name: 'Elysonic',  stops: ['#3B2C9A', '#8E2A8F', '#E0313B', '#FF8A1F', '#FFE14D'] },
+      ocean:     { name: 'Ocean',     stops: ['#1E3A8A', '#1F6FB2', '#1FA6C9', '#5FDDE0', '#D9FFF6'] },
+      aurora:    { name: 'Aurora',    stops: ['#3A1F7A', '#2563A8', '#22B59A', '#8EEA7C', '#F2FF8A'] },
+      ember:     { name: 'Ember',     stops: ['#5A1414', '#A3201A', '#E2461C', '#FF8A1F', '#FFD98A'] },
+      synthwave: { name: 'Synthwave', stops: ['#3A0CA3', '#7209B7', '#D61F8C', '#FF5D8F', '#4CC9F0'] },
+      phosphor:  { name: 'Phosphor',  stops: ['#134E2C', '#1B7A3E', '#2BB35A', '#74F08E', '#E0FFE6'] }
     };
 
     const STYLE_NAMES = {
@@ -162,8 +76,15 @@
     let currentStyle = 'mini-led';
     let currentPalette = 'elysonic';
     let isPlaying = !reducedMotion;
+    let isVisible = false;
+    let rafId = null;
+    let logicalW = 960;
+    let logicalH = 300;
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+
     let time = 1.4;
     const BANDS = 64;
+    const LED_ROWS = 20;
     const levels = new Float32Array(BANDS);
     const beforeLevels = new Float32Array(BANDS);
     const peaks = new Float32Array(BANDS);
@@ -178,16 +99,27 @@
     let beatPulse = 0;
     let lastBeatTime = 0;
 
-    // Offscreen phosphor buffer for CRT persistence
-    const crtPhosphor = document.createElement('canvas');
-    crtPhosphor.width = canvas.width;
-    crtPhosphor.height = canvas.height;
-    const crtPctx = crtPhosphor.getContext('2d');
+    // Lazy-sized offscreen phosphor buffer for CRT persistence
+    let crtPhosphor = null;
+    let crtPctx = null;
+
+    function ensureCrtBuffer() {
+      if (!crtPhosphor) {
+        crtPhosphor = document.createElement('canvas');
+        crtPctx = crtPhosphor.getContext('2d');
+      }
+      if (crtPhosphor.width !== canvas.width || crtPhosphor.height !== canvas.height) {
+        crtPhosphor.width = canvas.width;
+        crtPhosphor.height = canvas.height;
+      }
+      crtPctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
 
     function hexToRgb(hex) {
       const n = parseInt(hex.slice(1), 16);
       return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
     }
+
     function sampleRamp(stops, t) {
       const p = Math.max(0, Math.min(1, t)) * (stops.length - 1);
       const i = Math.min(stops.length - 2, Math.floor(p));
@@ -200,7 +132,15 @@
         Math.round(a[2] + (b[2] - a[2]) * k)
       ];
     }
-    // Simulated EQ curve (warm bass lift, crisp upper-mid presence, gentle top roll-off)
+
+    // Precompute the 20-row RGB lookup table once per palette change (avoids 1,280 parses/frame)
+    let ledRowRgb = [];
+    function rebuildLedPaletteCache() {
+      const stops = PALETTES[currentPalette].stops;
+      ledRowRgb = Array.from({ length: LED_ROWS }, (_, r) => sampleRamp(stops, r / (LED_ROWS - 1)));
+    }
+    rebuildLedPaletteCache();
+
     function eqCurveShare(norm) {
       const bass = 0.16 * Math.exp(-Math.pow((norm - 0.12) * 4.2, 2));
       const dip = -0.05 * Math.exp(-Math.pow((norm - 0.36) * 5.0, 2));
@@ -209,51 +149,91 @@
       return Math.max(0.08, Math.min(0.92, 0.52 + bass + dip + presence + air));
     }
 
-    function updateReadout() {
-      if (readout) {
-        const palLabel = currentStyle === 'retro-scifi' ? 'Console Film Palette' : `${PALETTES[currentPalette].name} Palette`;
-        readout.textContent = `${STYLE_NAMES[currentStyle]} · ${palLabel}`;
+    function syncCanvasSize() {
+      const rect = canvasWrap.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      logicalW = Math.round(rect.width);
+      logicalH = Math.round(rect.height);
+      const backingW = Math.max(1, Math.round(logicalW * dpr));
+      const backingH = Math.max(1, Math.round(logicalH * dpr));
+      if (canvas.width !== backingW || canvas.height !== backingH) {
+        canvas.width = backingW;
+        canvas.height = backingH;
       }
-      if (bpmPill) {
-        bpmPill.hidden = true;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (crtPhosphor) {
+        crtPhosphor.width = backingW;
+        crtPhosphor.height = backingH;
+      }
+      renderFrame(0);
+    }
+
+    function updateReadoutAndPalettes() {
+      const isRetro = currentStyle === 'retro-scifi';
+      if (readout) {
+        const palLabel = isRetro ? 'Console Film Palette' : `${PALETTES[currentPalette].name} Palette`;
+        readout.textContent = `${STYLE_NAMES[currentStyle]} · ${palLabel} · Silent preview`;
+      }
+      if (paletteLabel) {
+        paletteLabel.textContent = isRetro
+          ? 'Retro sci-fi uses its own 1970s console palette'
+          : 'Pick a color theme (custom themes in the app)';
+      }
+      for (const btn of paletteButtons) {
+        btn.disabled = isRetro;
       }
     }
 
-    document.querySelectorAll('[data-viz-styles] .chip').forEach((btn) => {
+    styleButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
         currentStyle = btn.dataset.style;
-        document.querySelectorAll('[data-viz-styles] .chip').forEach((b) => {
+        styleButtons.forEach((b) => {
           const active = b === btn;
           b.classList.toggle('is-active', active);
           b.setAttribute('aria-pressed', String(active));
         });
-        updateReadout();
-        if (!isPlaying) renderFrame(0);
+        updateReadoutAndPalettes();
+        if (!rafId) renderFrame(0);
       });
     });
 
-    document.querySelectorAll('[data-viz-palettes] .chip').forEach((btn) => {
+    paletteButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
+        if (btn.disabled) return;
         currentPalette = btn.dataset.palette;
-        document.querySelectorAll('[data-viz-palettes] .chip').forEach((b) => {
+        rebuildLedPaletteCache();
+        paletteButtons.forEach((b) => {
           const active = b === btn;
           b.classList.toggle('is-active', active);
           b.setAttribute('aria-pressed', String(active));
         });
-        updateReadout();
-        if (!isPlaying) renderFrame(0);
+        updateReadoutAndPalettes();
+        if (!rafId) renderFrame(0);
       });
     });
+
+    function syncLoop() {
+      const shouldRun = isPlaying && isVisible && !document.hidden;
+      if (shouldRun && !rafId) {
+        last = performance.now();
+        rafId = requestAnimationFrame(loop);
+      } else if (!shouldRun && rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+    }
 
     if (toggleBtn) {
       if (!isPlaying) {
-        toggleBtn.textContent = 'Play';
+        toggleBtn.textContent = 'Resume motion';
         toggleBtn.setAttribute('aria-pressed', 'false');
       }
       toggleBtn.addEventListener('click', () => {
         isPlaying = !isPlaying;
-        toggleBtn.textContent = isPlaying ? 'Pause' : 'Play';
+        toggleBtn.textContent = isPlaying ? 'Pause motion' : 'Resume motion';
         toggleBtn.setAttribute('aria-pressed', String(isPlaying));
+        syncLoop();
       });
     }
 
@@ -341,39 +321,40 @@
 
     function renderFrame(dt) {
       stepSignal(dt);
-      const w = canvas.width;
-      const h = canvas.height;
+      const w = logicalW;
+      const h = logicalH;
       const stops = PALETTES[currentPalette].stops;
-      const grad = makeVerticalGradient(h);
 
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
       ctx.fillStyle = '#090a0d';
       ctx.fillRect(0, 0, w, h);
 
-      const padX = 20;
+      const padX = Math.max(10, Math.round(w * 0.02));
       const usableW = w - padX * 2;
 
       if (currentStyle === 'mini-led') {
-        // Real Elysonic LED bars: square grid, dim unlit cells, brighter EQ curve backlight,
-        // lit post-EQ bars, peak caps, and pale before-EQ marker cells.
-        const cols = 64;
-        const rows = 20;
+        const cols = w < 520 ? 32 : 64;
+        const rows = LED_ROWS;
         const cellW = usableW / cols;
-        const cellH = (h - 24) / rows;
-        const gapX = Math.max(1.5, cellW * 0.14);
-        const gapY = Math.max(1.5, cellH * 0.14);
+        const cellH = (h - 20) / rows;
+        const gapX = Math.max(1.2, cellW * 0.14);
+        const gapY = Math.max(1.2, cellH * 0.14);
+        const cw = Math.max(2, cellW - gapX);
+        const ch = Math.max(2, cellH - gapY);
+
         for (let c = 0; c < cols; c++) {
           const norm = c / (cols - 1);
+          const bandIdx = Math.round(norm * (BANDS - 1));
           const curveRow = Math.round(eqCurveShare(norm) * (rows - 1));
-          const litRows = levels[c] * rows;
-          const peakRow = Math.min(rows - 1, Math.floor(peaks[c] * rows));
-          const preRow = Math.min(rows - 1, Math.floor(beforeLevels[c] * rows));
+          const litRows = levels[bandIdx] * rows;
+          const peakRow = Math.min(rows - 1, Math.floor(peaks[bandIdx] * rows));
+          const preRow = Math.min(rows - 1, Math.floor(beforeLevels[bandIdx] * rows));
           const x = padX + c * cellW + gapX / 2;
-          const cw = Math.max(2, cellW - gapX);
-          const ch = Math.max(2, cellH - gapY);
+
           for (let r = 0; r < rows; r++) {
-            const y = h - 12 - (r + 1) * cellH + gapY / 2;
-            const [R, G, B] = sampleRamp(stops, r / (rows - 1));
+            const y = h - 10 - (r + 1) * cellH + gapY / 2;
+            const [R, G, B] = ledRowRgb[r];
             const on = litRows - r;
             if (on >= 1) {
               ctx.fillStyle = `rgba(${R},${G},${B},0.94)`;
@@ -393,7 +374,7 @@
           }
         }
       } else if (currentStyle === 'classic') {
-        // Real Elysonic Classic: subtle band grid, smooth filled spectrum + pale before-EQ line + crisp EQ response curve.
+        const grad = makeVerticalGradient(h);
         ctx.strokeStyle = 'rgba(255,255,255,0.045)';
         ctx.lineWidth = 1;
         for (let g = 1; g < 10; g++) {
@@ -403,7 +384,6 @@
         for (const t of [0.25, 0.5, 0.75]) {
           ctx.beginPath(); ctx.moveTo(padX, h * t); ctx.lineTo(w - padX, h * t); ctx.stroke();
         }
-        // Filled post-EQ spectrum
         ctx.beginPath();
         ctx.moveTo(padX, h - 12);
         for (let i = 0; i < BANDS; i++) {
@@ -427,7 +407,6 @@
         ctx.lineWidth = 2;
         ctx.stroke();
 
-        // Pale before-EQ trace
         ctx.beginPath();
         for (let i = 0; i < BANDS; i++) {
           const x = padX + (i / (BANDS - 1)) * usableW;
@@ -438,7 +417,6 @@
         ctx.lineWidth = 1.25;
         ctx.stroke();
 
-        // Smooth EQ curve + 10 band handles
         ctx.beginPath();
         for (let i = 0; i < BANDS; i++) {
           const norm = i / (BANDS - 1);
@@ -453,7 +431,7 @@
           const norm = (b + 0.5) / 10;
           const x = padX + norm * usableW;
           const y = h - 12 - eqCurveShare(norm) * (h - 28);
-          ctx.beginPath(); ctx.arc(x, y, 4.5, 0, Math.PI * 2);
+          ctx.beginPath(); ctx.arc(x, y, 4.2, 0, Math.PI * 2);
           ctx.fillStyle = '#0f1015'; ctx.fill();
           ctx.strokeStyle = stops[stops.length - 2]; ctx.lineWidth = 2; ctx.stroke();
         }
@@ -464,8 +442,8 @@
         ctx.fillStyle = ch;
         ctx.fillRect(0, 0, w, h);
 
-        const pad = 14;
-        const gap = 14;
+        const pad = Math.max(8, Math.round(Math.min(w, h) * 0.045));
+        const gap = pad;
         const mw = (w - pad * 2 - gap) / 2;
         const mh = h - pad * 2;
         const vuAngle = (vu) => -Math.PI / 2 + (Math.max(0, Math.min(1, (vu + 20) / 23)) - 0.5) * 1.42;
@@ -474,12 +452,13 @@
           { title: 'BEFORE EQ', val: vuPre },
           { title: 'WITH EQ', val: vuPost }
         ];
+        const fontScale = Math.max(0.62, Math.min(1, mw / 320));
         meters.forEach((m, idx) => {
           const x = pad + idx * (mw + gap);
           const y = pad;
           const cx = x + mw / 2;
           const cy = y + mh * 1.05;
-          const R = Math.min(mw * 0.72, mh * 0.86);
+          const R = Math.min(mw * 0.68, mh * 0.84);
           ctx.save();
           ctx.beginPath();
           ctx.roundRect(x, y, mw, mh, 10);
@@ -506,7 +485,7 @@
           ctx.beginPath(); ctx.arc(cx, cy, R * 0.84, vuAngle(-20), vuAngle(0));
           ctx.strokeStyle = 'rgba(36,26,18,0.35)'; ctx.lineWidth = 1.2; ctx.stroke();
 
-          ctx.font = '600 12px "Plus Jakarta Sans", sans-serif';
+          ctx.font = `600 ${Math.round(12 * fontScale)}px "Plus Jakarta Sans", sans-serif`;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           for (const [vu, label] of marks) {
@@ -523,10 +502,10 @@
             ctx.fillText(label, cx + Math.cos(a) * R * 1.15, cy + Math.sin(a) * R * 1.15);
           }
 
-          ctx.font = '700 26px Georgia, serif';
+          ctx.font = `700 ${Math.round(24 * fontScale)}px Georgia, serif`;
           ctx.fillStyle = 'rgba(36,24,14,0.52)';
           ctx.fillText('VU', cx, y + mh * 0.56);
-          ctx.font = '600 11px "JetBrains Mono", monospace';
+          ctx.font = `600 ${Math.round(11 * fontScale)}px "JetBrains Mono", monospace`;
           ctx.fillStyle = 'rgba(36,24,14,0.68)';
           ctx.fillText(m.title, cx, y + mh * 0.72);
 
@@ -546,7 +525,7 @@
           ctx.fillStyle = '#191512'; ctx.fill();
 
           const hot = m.val > 0.80;
-          ctx.beginPath(); ctx.arc(x + mw - 18, y + 18, 5, 0, Math.PI * 2);
+          ctx.beginPath(); ctx.arc(x + mw - 16, y + 16, 4.5, 0, Math.PI * 2);
           ctx.fillStyle = hot ? stops[stops.length - 1] : 'rgba(40,18,16,0.45)';
           if (hot) { ctx.shadowColor = stops[stops.length - 1]; ctx.shadowBlur = 12; }
           ctx.fill(); ctx.shadowBlur = 0;
@@ -581,7 +560,6 @@
         ctx.fillStyle = aura;
         ctx.fillRect(0, 0, w, h);
 
-        // Rotating astronomical compass ticks
         ctx.save();
         ctx.strokeStyle = 'rgba(255,255,255,0.12)';
         ctx.lineWidth = 1.2;
@@ -634,7 +612,6 @@
         ctx.stroke();
         ctx.shadowBlur = 0;
 
-        // Individual luminous rays
         ctx.beginPath();
         ctx.strokeStyle = radial;
         ctx.lineWidth = 1.6;
@@ -646,7 +623,6 @@
         }
         ctx.stroke();
 
-        // Orbiting peak-hold starlight dots
         ctx.fillStyle = `rgb(${r1},${g1},${b1})`;
         for (let i = 0; i < RAYS; i++) {
           const idx = Math.floor(((i < HALF ? i : RAYS - 1 - i) / (HALF - 1)) * (BANDS - 1));
@@ -655,7 +631,6 @@
           ctx.beginPath(); ctx.arc(cx + Math.cos(a) * pr, cy + Math.sin(a) * pr, 1.8, 0, Math.PI * 2); ctx.fill();
         }
 
-        // Before-EQ dashed ring
         ctx.save();
         ctx.beginPath();
         for (let i = 0; i < RAYS; i++) {
@@ -673,7 +648,6 @@
         ctx.stroke();
         ctx.restore();
 
-        // Dark inner core disc with glowing rim
         ctx.beginPath(); ctx.arc(cx, cy, baseR * 0.96, 0, Math.PI * 2);
         ctx.fillStyle = '#090a0f'; ctx.fill();
         ctx.strokeStyle = `rgba(${r1},${g1},${b1},0.78)`; ctx.lineWidth = 1.6; ctx.stroke();
@@ -743,7 +717,6 @@
           }
           ctx.restore();
         }
-        // Before-EQ dashed horizon trace
         ctx.save();
         ctx.beginPath();
         for (let i = 0; i < BANDS; i++) {
@@ -759,15 +732,13 @@
         ctx.stroke();
         ctx.restore();
       } else if (currentStyle === 'crt') {
-        // Real Elysonic CRT: phosphor spectrum tube with afterglow, faint EQ curve burn,
-        // band grid, pale before-EQ line, 3px scanlines, dark corners, and glass sheen.
+        ensureCrtBuffer();
         const glass = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.hypot(w, h) / 2);
         glass.addColorStop(0, '#101413');
         glass.addColorStop(1, '#050706');
         ctx.fillStyle = glass;
         ctx.fillRect(0, 0, w, h);
 
-        // Burned-in EQ curve glow
         const [br, bgc, bb] = sampleRamp(stops, 0.5);
         ctx.beginPath();
         ctx.moveTo(0, h);
@@ -780,7 +751,6 @@
         ctx.fillStyle = `rgba(${br},${bgc},${bb},0.09)`;
         ctx.fill();
 
-        // Faint tube grid
         ctx.strokeStyle = 'rgba(255,255,255,0.05)';
         ctx.lineWidth = 1;
         ctx.beginPath();
@@ -794,7 +764,6 @@
         }
         ctx.stroke();
 
-        // Phosphor persistence decay + new filled spectrum
         crtPctx.save();
         crtPctx.globalCompositeOperation = 'destination-out';
         crtPctx.fillStyle = `rgba(0,0,0,${dt > 0 ? Math.min(1, dt * 7) : 1})`;
@@ -825,15 +794,14 @@
         crtPctx.lineWidth = 2.4;
         crtPctx.stroke();
 
-        ctx.drawImage(crtPhosphor, 0, 0);
+        ctx.drawImage(crtPhosphor, 0, 0, w, h);
         ctx.save();
         ctx.globalCompositeOperation = 'lighter';
-        ctx.filter = 'blur(8px)';
-        ctx.globalAlpha = 0.55;
-        ctx.drawImage(crtPhosphor, 0, 0);
+        ctx.globalAlpha = 0.35;
+        ctx.drawImage(crtPhosphor, 0, -2, w, h);
+        ctx.drawImage(crtPhosphor, 0, 2, w, h);
         ctx.restore();
 
-        // Pale before-EQ trace with dark edge
         ctx.beginPath();
         for (let i = 0; i < BANDS; i++) {
           const x = (i + 0.5) / BANDS * w;
@@ -843,7 +811,6 @@
         ctx.lineWidth = 3.2; ctx.strokeStyle = 'rgba(0,0,0,0.48)'; ctx.stroke();
         ctx.lineWidth = 1.4; ctx.strokeStyle = 'rgba(240,240,246,0.72)'; ctx.stroke();
 
-        // Scanlines, dark corners, glass sheen
         ctx.fillStyle = 'rgba(0,0,0,0.3)';
         for (let y = 0; y < h; y += 3) ctx.fillRect(0, y, w, 1);
         const corners = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.35, w / 2, h / 2, Math.hypot(w, h) / 2);
@@ -855,8 +822,6 @@
         sheen.addColorStop(0.35, 'rgba(255,255,255,0)');
         ctx.fillStyle = sheen; ctx.fillRect(0, 0, w, h);
       } else if (currentStyle === 'retro-scifi') {
-        // Real Elysonic Retro sci-fi: 1970s film computer console with turning 3D wireframe sphere,
-        // 3 corner dials (beat counter, time left, BPM), right-side loudness meter, and cut-corner coral frame.
         const C = { back: '#151111', lift: '#1d1716', frame: '#d46a5e', amber: '#e2bd6c', orange: '#d9825f', teal: '#6dcfb1', peak: '#efd592' };
         const ringRamp = [C.frame, C.orange, C.amber, C.peak];
         const meterRamp = [C.peak, C.amber, C.orange, C.frame];
@@ -867,14 +832,14 @@
         ctx.fillStyle = room;
         ctx.fillRect(0, 0, w, h);
 
-        const meterX = w - 68;
-        const meterW = 42;
-        const meterY = 38;
-        const meterBottom = h - 18;
-        const areaLeft = 28;
-        const areaRight = meterX - 16;
+        const compact = w < 520;
+        const meterW = compact ? 26 : 42;
+        const meterX = w - meterW - (compact ? 14 : 26);
+        const meterY = compact ? 24 : 38;
+        const meterBottom = h - 16;
+        const areaLeft = compact ? 18 : 28;
+        const areaRight = meterX - 12;
 
-        // Faint teal grid
         ctx.save();
         ctx.strokeStyle = C.teal;
         ctx.globalAlpha = 0.08;
@@ -885,29 +850,27 @@
         ctx.stroke();
         ctx.restore();
 
-        // Cut-corner coral frame
         ctx.save();
         ctx.strokeStyle = C.frame;
         ctx.shadowColor = C.frame;
         ctx.shadowBlur = 10;
         ctx.lineWidth = 1.6;
-        const cut = 26;
+        const cut = compact ? 16 : 26;
         ctx.beginPath();
         ctx.moveTo(4, 4); ctx.lineTo(w - 4 - cut, 4); ctx.lineTo(w - 4, 4 + cut);
         ctx.lineTo(w - 4, h - 4); ctx.lineTo(4, h - 4); ctx.closePath();
         ctx.stroke();
         ctx.beginPath();
-        ctx.moveTo(w - 4 - cut - 120, 12); ctx.lineTo(w - 4 - cut - 8, 12);
+        ctx.moveTo(w - 4 - cut - (compact ? 60 : 120), 12); ctx.lineTo(w - 4 - cut - 8, 12);
         ctx.stroke();
 
-        // Amber left scale & right meter bezel
         ctx.strokeStyle = C.amber;
         ctx.shadowColor = C.amber;
         ctx.beginPath();
-        ctx.moveTo(22, 18); ctx.lineTo(14, 18); ctx.lineTo(14, h - 18); ctx.lineTo(22, h - 18);
+        ctx.moveTo(18, 18); ctx.lineTo(12, 18); ctx.lineTo(12, h - 18); ctx.lineTo(18, h - 18);
         for (let k = 1; k < 8; k++) {
           const sy = 18 + ((h - 36) * k) / 8;
-          ctx.moveTo(14, sy); ctx.lineTo(14 + (k === 4 ? 9 : 5), sy);
+          ctx.moveTo(12, sy); ctx.lineTo(12 + (k === 4 ? 8 : 4), sy);
         }
         ctx.stroke();
         ctx.beginPath();
@@ -915,8 +878,7 @@
         ctx.stroke();
         ctx.restore();
 
-        // Teal crosshair behind sphere
-        const R = Math.min(h * 0.35, w * 0.16);
+        const R = Math.min(h * 0.34, (areaRight - areaLeft) * 0.24);
         const cx = (areaLeft + areaRight) / 2;
         const cy = h / 2 + R * 0.04;
         const TILT = 0.38;
@@ -928,7 +890,7 @@
         ctx.lineWidth = 1.8;
         ctx.beginPath();
         ctx.moveTo(cx, cy - R * 1.28); ctx.lineTo(cx, cy + R * 1.28);
-        ctx.moveTo(cx - R * 1.85, cy); ctx.lineTo(cx + R * 1.85, cy);
+        ctx.moveTo(cx - R * 1.65, cy); ctx.lineTo(cx + R * 1.65, cy);
         ctx.stroke();
         ctx.restore();
 
@@ -960,7 +922,6 @@
           ctx.globalAlpha = 1;
         };
 
-        // 17 latitude rings swollen by frequency level
         const RINGS = 17;
         const MERIDIANS = 14;
         const STEPS = 36;
@@ -974,7 +935,6 @@
           const [r, g, b] = sampleRamp(ringRamp, sh);
           strokeSplit(pts, `rgb(${r},${g},${b})`, 0.58 + 0.38 * sh, sh > 0.58 ? 2 : 1.2);
         }
-        // 14 rotating meridians
         for (let m = 0; m < MERIDIANS; m++) {
           const lon = sphereTurn + (m / MERIDIANS) * Math.PI * 2;
           const pts = [];
@@ -984,7 +944,6 @@
           }
           strokeSplit(pts, C.frame, 0.65, 1.1);
         }
-        // Before-EQ teal side silhouette
         ctx.strokeStyle = C.teal;
         ctx.globalAlpha = 0.62;
         ctx.lineWidth = 1.4;
@@ -1001,15 +960,13 @@
         ctx.stroke();
         ctx.restore();
 
-        // Top amber marker
         const topY = cy - R * Math.cos(TILT) - 8;
         ctx.fillStyle = C.amber;
         ctx.beginPath(); ctx.moveTo(cx - 5, topY - 7); ctx.lineTo(cx + 5, topY - 7); ctx.lineTo(cx, topY); ctx.closePath(); ctx.fill();
         ctx.fillRect(cx - 7, topY - 10, 14, 1.5);
 
-        // Right loudness meter (16 rounded bars)
         const bars = 16;
-        const mPad = 6;
+        const mPad = 5;
         const innerTop = meterY + mPad;
         const innerBot = meterBottom - mPad;
         const pitch = (innerBot - innerTop) / bars;
@@ -1028,78 +985,73 @@
           ctx.restore();
         }
 
-        // Amber numeric readout top right
-        ctx.save();
-        ctx.font = '500 13px "JetBrains Mono", monospace';
-        ctx.textAlign = 'right';
-        ctx.fillStyle = C.amber;
-        ctx.shadowColor = C.amber;
-        ctx.shadowBlur = 6;
-        const dbVal = (-60 + vuPost * 56).toFixed(2);
-        ctx.fillText(`${dbVal} ${String(Math.round(vuPost * bars)).padStart(2, '0')}`, areaRight - 14, 46);
-        ctx.fillText(`01.420 09`, areaRight - 14, 64);
-        ctx.restore();
-
-        // Three console dials (Beats, Time Left, BPM)
-        const drawDial = (dx, dy, dr, paint) => {
+        if (!compact) {
           ctx.save();
-          ctx.translate(dx, dy);
-          ctx.shadowColor = C.teal;
-          ctx.shadowBlur = 5;
-          paint(dr);
+          ctx.font = '500 13px "JetBrains Mono", monospace';
+          ctx.textAlign = 'right';
+          ctx.fillStyle = C.amber;
+          ctx.shadowColor = C.amber;
+          ctx.shadowBlur = 6;
+          const dbVal = (-60 + vuPost * 56).toFixed(2);
+          ctx.fillText(`${dbVal} ${String(Math.round(vuPost * bars)).padStart(2, '0')}`, areaRight - 14, 46);
+          ctx.fillText(`01.420 09`, areaRight - 14, 64);
           ctx.restore();
-        };
-        const dialRing = (r, a0, a1, lw, alpha, color = C.teal) => {
-          ctx.beginPath(); ctx.arc(0, 0, r, a0, a1);
-          ctx.lineWidth = lw; ctx.strokeStyle = color; ctx.globalAlpha = alpha; ctx.stroke();
-        };
-        const dialLabel = (txt, size = 12) => {
-          ctx.font = `500 ${size}px "JetBrains Mono", monospace`;
-          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-          ctx.fillStyle = C.amber; ctx.shadowColor = C.amber; ctx.shadowBlur = 5; ctx.globalAlpha = 0.95;
-          ctx.fillText(txt, 0, 1);
-        };
-        const up = -Math.PI / 2;
-        const whole = Math.PI * 2;
-        // Top-left: Beats
-        drawDial(92, 68, 34, (r) => {
-          const lit = Math.round(vuPost * 12);
-          for (let i = 0; i < 12; i++) {
-            const a = up + (i / 12) * whole;
-            dialRing(r, a + 0.06, a + whole / 12 - 0.12, 4.5, i < lit ? 0.85 : 0.18, i === lit ? '#f2ede4' : C.teal);
-          }
-          dialRing(r * 0.68 * (1 + 0.09 * beatPulse), 0, whole, 1.5 + 2.2 * beatPulse, 0.35 + 0.6 * beatPulse);
-          dialLabel(String(beatCount).padStart(4, '0'), 11);
-        });
-        // Bottom-left: Time left
-        drawDial(92, h - 64, 34, (r) => {
-          dialRing(r, 0, whole, 4.5, 0.16);
-          const frac = 1 - ((time % 240) / 240);
-          dialRing(r, up, up + whole * frac, 4.5, 0.9);
-          const leftSec = Math.max(0, Math.round(240 - (time % 240)));
-          dialLabel(`${Math.floor(leftSec / 60)}:${String(leftSec % 60).padStart(2, '0')}`, 12);
-        });
-        // Bottom-right: Tempo (BPM)
-        drawDial(areaRight - 64, h - 64, 34, (r) => {
-          const turn = (time * Math.PI * 2 * 118 / 240) % whole;
-          dialRing(r, turn, turn + whole * 0.75, 2.2, 0.85);
-          for (let i = 0; i < 24; i++) {
-            const a = up + (i / 24) * whole;
-            ctx.beginPath(); ctx.moveTo(Math.cos(a) * r * 0.62, Math.sin(a) * r * 0.62);
-            ctx.lineTo(Math.cos(a) * r * 0.82, Math.sin(a) * r * 0.82);
-            ctx.lineWidth = 2.2; ctx.strokeStyle = C.teal; ctx.globalAlpha = i < 14 ? 0.85 : 0.18; ctx.stroke();
-          }
-          dialLabel('118', 12);
-        });
 
-        // Film scanlines & worn-print haze
+          const drawDial = (dx, dy, dr, paint) => {
+            ctx.save();
+            ctx.translate(dx, dy);
+            ctx.shadowColor = C.teal;
+            ctx.shadowBlur = 5;
+            paint(dr);
+            ctx.restore();
+          };
+          const dialRing = (r, a0, a1, lw, alpha, color = C.teal) => {
+            ctx.beginPath(); ctx.arc(0, 0, r, a0, a1);
+            ctx.lineWidth = lw; ctx.strokeStyle = color; ctx.globalAlpha = alpha; ctx.stroke();
+          };
+          const dialLabel = (txt, size = 12) => {
+            ctx.font = `500 ${size}px "JetBrains Mono", monospace`;
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillStyle = C.amber; ctx.shadowColor = C.amber; ctx.shadowBlur = 5; ctx.globalAlpha = 0.95;
+            ctx.fillText(txt, 0, 1);
+          };
+          const up = -Math.PI / 2;
+          const whole = Math.PI * 2;
+          const dialR = Math.min(34, Math.round(h * 0.115));
+          drawDial(92, Math.max(dialR + 24, 68), dialR, (r) => {
+            const lit = Math.round(vuPost * 12);
+            for (let i = 0; i < 12; i++) {
+              const a = up + (i / 12) * whole;
+              dialRing(r, a + 0.06, a + whole / 12 - 0.12, 4.5, i < lit ? 0.85 : 0.18, i === lit ? '#f2ede4' : C.teal);
+            }
+            dialRing(r * 0.68 * (1 + 0.09 * beatPulse), 0, whole, 1.5 + 2.2 * beatPulse, 0.35 + 0.6 * beatPulse);
+            dialLabel(String(beatCount).padStart(4, '0'), 11);
+          });
+          drawDial(92, h - Math.max(dialR + 24, 64), dialR, (r) => {
+            dialRing(r, 0, whole, 4.5, 0.16);
+            const frac = 1 - ((time % 240) / 240);
+            dialRing(r, up, up + whole * frac, 4.5, 0.9);
+            const leftSec = Math.max(0, Math.round(240 - (time % 240)));
+            dialLabel(`${Math.floor(leftSec / 60)}:${String(leftSec % 60).padStart(2, '0')}`, 12);
+          });
+          drawDial(areaRight - 64, h - Math.max(dialR + 24, 64), dialR, (r) => {
+            const turn = (time * Math.PI * 2 * 118 / 240) % whole;
+            dialRing(r, turn, turn + whole * 0.75, 2.2, 0.85);
+            for (let i = 0; i < 24; i++) {
+              const a = up + (i / 24) * whole;
+              ctx.beginPath(); ctx.moveTo(Math.cos(a) * r * 0.62, Math.sin(a) * r * 0.62);
+              ctx.lineTo(Math.cos(a) * r * 0.82, Math.sin(a) * r * 0.82);
+              ctx.lineWidth = 2.2; ctx.strokeStyle = C.teal; ctx.globalAlpha = i < 14 ? 0.85 : 0.18; ctx.stroke();
+            }
+            dialLabel('118', 12);
+          });
+        }
+
         ctx.fillStyle = 'rgba(0,0,0,0.36)';
         for (let y = 0; y < h; y += 3) ctx.fillRect(0, y, w, 1);
         ctx.fillStyle = 'rgba(236,200,180,0.045)';
         ctx.fillRect(0, 0, w, h);
       } else if (currentStyle === 'pulsar') {
-        // Real Elysonic Pulsar: 36 stacked scrolling ridgelines, raised-cosine tapered edges,
-        // soft tanh top squeeze, default gray-to-white (or chosen palette), dashed before-EQ line.
         ctx.fillStyle = '#0a0c0f';
         ctx.fillRect(0, 0, w, h);
         const lines = 36;
@@ -1156,7 +1108,6 @@
         }
         drawRow(levels, 0);
 
-        // Dashed before-EQ trace on the front line
         const prePath = new Path2D();
         traceLine(prePath, beforeLevels, bottom);
         ctx.save();
@@ -1169,21 +1120,41 @@
       }
     }
 
-    stepSignal(0.05);
-    renderFrame(0);
-    updateReadout();
-
     let last = performance.now();
     function loop(now) {
+      rafId = null;
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
-      if (isPlaying) renderFrame(dt);
-      requestAnimationFrame(loop);
+      renderFrame(dt);
+      syncLoop();
     }
-    requestAnimationFrame(loop);
+
+    stepSignal(0.05);
+    updateReadoutAndPalettes();
+    syncCanvasSize();
+
+    if (typeof ResizeObserver === 'function') {
+      const ro = new ResizeObserver(() => syncCanvasSize());
+      ro.observe(canvasWrap);
+    } else {
+      window.addEventListener('resize', syncCanvasSize);
+    }
+
+    if (typeof IntersectionObserver === 'function') {
+      const io = new IntersectionObserver((entries) => {
+        isVisible = entries.some((entry) => entry.isIntersecting);
+        syncLoop();
+      }, { rootMargin: '100px 0px' });
+      io.observe(canvasWrap);
+    } else {
+      isVisible = true;
+      syncLoop();
+    }
+
+    document.addEventListener('visibilitychange', syncLoop);
   }
 
-  /* ==================== 6. LIGHTBOX MODAL ==================== */
+  /* ==================== 3. LIGHTBOX MODAL ==================== */
   const viewer = document.querySelector('#image-viewer');
   if (viewer && typeof viewer.showModal === 'function') {
     const title = viewer.querySelector('#image-title');
@@ -1199,6 +1170,11 @@
         title.textContent = link.dataset.title || '';
         const img = link.querySelector('img');
         enlarged.alt = img ? img.alt : '';
+        if (img && img.naturalWidth && img.naturalHeight) {
+          enlarged.style.aspectRatio = `${img.naturalWidth} / ${img.naturalHeight}`;
+        } else {
+          enlarged.style.aspectRatio = '';
+        }
         enlarged.src = link.href;
         enlarged.hidden = false;
         original.href = link.href;
@@ -1212,6 +1188,7 @@
 
     viewer.addEventListener('close', () => {
       enlarged.hidden = true;
+      enlarged.style.aspectRatio = '';
       enlarged.removeAttribute('src');
       opener?.focus({ preventScroll: true });
     });
